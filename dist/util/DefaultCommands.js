@@ -12,5 +12,6 @@ var DefaultCommands;
     DefaultCommands["Config"] = "config";
     DefaultCommands["SimulateEvent"] = "simulateevent";
     DefaultCommands["InitDatabase"] = "init-database";
+    DefaultCommands["Server"] = "server";
 })(DefaultCommands || (DefaultCommands = {}));
 exports.default = DefaultCommands;

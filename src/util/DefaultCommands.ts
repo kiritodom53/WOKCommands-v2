@@ -9,6 +9,7 @@ enum DefaultCommands {
     Config = "config",
     SimulateEvent = "simulateevent",
     InitDatabase = "init-database",
+    Server = "server",
 }
 
 export default DefaultCommands;
