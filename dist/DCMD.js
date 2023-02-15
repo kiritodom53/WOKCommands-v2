@@ -91,7 +91,7 @@ class DssbCmdler {
             database: process.env.LIVE == "true"
                 ? process.env.MARIADB_DATABASE
                 : process.env.MARIADB_DATABASE_TEST,
-            synchronize: false,
+            synchronize: true,
             entities: index_model_1.default,
         });
         await exports.ds.initialize();
