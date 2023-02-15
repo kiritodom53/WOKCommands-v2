@@ -8,7 +8,6 @@ export default async (command: Command, usage: CommandUsage) => {
     if (!guild || !instance.isConnectedToMariaDB)
         return true;
 
-
     const availableChannels =
         await instance.commandHandler.channelCommands.getAvailableChannels(
             guild.id,

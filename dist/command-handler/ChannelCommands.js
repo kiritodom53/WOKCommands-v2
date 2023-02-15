@@ -45,7 +45,10 @@ class ChannelCommands {
         const t = this._channelCommands.get(_id);
         const channels = !t ? [] : t;
         if (channels.length === 0) {
-            const result = await DCMD_1.ds.getRepository(ChannelCommandsEntity_1.ChannelCommandsEntity).find();
+            const result = await DCMD_1.ds.getRepository(ChannelCommandsEntity_1.ChannelCommandsEntity).findBy({
+                commandId: commandName,
+                guildId: guildId,
+            });
             result.forEach((x) => channels.push(x.channelId));
             if (result.length < 1)
                 this._channelCommands.set(_id, []);
