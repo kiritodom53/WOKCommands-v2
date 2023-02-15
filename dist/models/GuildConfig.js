@@ -20,29 +20,38 @@ let GuildConfig = GuildConfig_1 = class GuildConfig {
     config;
     value;
     static async findByKey(guildId, key) {
-        return await DCMD_1.ds.getRepository(GuildConfig_1).findOneBy({
+        console.log("GuildConfig::findByKey - start");
+        const t = await DCMD_1.ds.getRepository(GuildConfig_1).findOneBy({
             guildId,
             configKey: key,
         });
+        console.log("GuildConfig::findByKey - start");
+        return t;
     }
     static async saveOrUpdate(guildId, key, value = null) {
+        console.log("GuildConfig::saveOrUpdate - start 1");
         try {
             const guildConf = GuildConfig_1.findByKey(guildId, key);
             if (!guildConf) {
+                console.log("GuildConfig::saveOrUpdate - start 1.1");
                 await DCMD_1.ds.getRepository(GuildConfig_1).save({
                     guildId,
                     configKey: key,
                     value,
                 });
+                console.log("GuildConfig::saveOrUpdate - end 1.1");
                 return true;
             }
+            console.log("GuildConfig::saveOrUpdate - start 1.2");
             await DCMD_1.ds.getRepository(GuildConfig_1).update({
                 guildId,
                 configKey: key,
             }, { value, });
+            console.log("GuildConfig::saveOrUpdate - end 1.2");
             return true;
         }
         catch (e) {
+            console.log("GuildConfig::saveOrUpdate - end 1");
             return false;
         }
     }
