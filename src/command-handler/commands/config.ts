@@ -56,8 +56,8 @@ export default {
             return;
 
 
-        const key = interaction.options.getString("command") as string;
-        const value = interaction.options.getString("command") as string;
+        const key = interaction.options.getString("key") as string;
+        const value = interaction.options.getString("value") as string;
 
         const conf = await ds.getRepository(Config).findBy({ key: key, });
         if (!conf)

@@ -21,7 +21,7 @@ let GuildConfig = GuildConfig_1 = class GuildConfig {
     value;
     static async findByKey(guildId, key) {
         return await DCMD_1.ds.getRepository(GuildConfig_1).findOneBy({
-            guildId,
+            guildId: guildId,
             configKey: key,
         });
     }
@@ -29,7 +29,6 @@ let GuildConfig = GuildConfig_1 = class GuildConfig {
         try {
             const guildConf = await GuildConfig_1.findByKey(guildId, key);
             if (!guildConf) {
-                console.log("save cf");
                 await DCMD_1.ds.getRepository(GuildConfig_1).save({
                     guildId: guildId,
                     configKey: key,
@@ -37,7 +36,6 @@ let GuildConfig = GuildConfig_1 = class GuildConfig {
                 });
                 return true;
             }
-            console.log("update cf");
             await DCMD_1.ds.getRepository(GuildConfig_1).update({
                 guildId: guildId,
                 configKey: key,

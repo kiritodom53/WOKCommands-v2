@@ -41,8 +41,8 @@ exports.default = {
             };
         if (!interaction.isChatInputCommand())
             return;
-        const key = interaction.options.getString("command");
-        const value = interaction.options.getString("command");
+        const key = interaction.options.getString("key");
+        const value = interaction.options.getString("value");
         const conf = await DCMD_1.ds.getRepository(Config_1.Config).findBy({ key: key, });
         if (!conf)
             return {

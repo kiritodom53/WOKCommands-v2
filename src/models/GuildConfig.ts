@@ -21,7 +21,7 @@ export class GuildConfig {
 
     public static async findByKey(guildId: string, key: ConfigType | string): Promise<GuildConfig | null> {
         return await ds.getRepository(GuildConfig).findOneBy({
-            guildId,
+            guildId: guildId,
             configKey: key,
         });
     }
@@ -31,7 +31,6 @@ export class GuildConfig {
             const guildConf = await GuildConfig.findByKey(guildId, key);
 
             if (!guildConf) {
-                console.log("save cf");
                 await ds.getRepository(GuildConfig).save({
                     guildId: guildId,
                     configKey: key,
@@ -39,7 +38,6 @@ export class GuildConfig {
                 });
                 return true;
             }
-            console.log("update cf");
             await ds.getRepository(GuildConfig).update({
                 guildId: guildId,
                 configKey: key,
