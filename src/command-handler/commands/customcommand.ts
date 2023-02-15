@@ -62,77 +62,77 @@ export default {
     autocomplete: (
         command: Command,
         _: string,
-        interaction: AutocompleteInteraction
+        interaction: AutocompleteInteraction,
     ) => {
         const results = [
             ...command.instance.commandHandler.customCommands.getCommands(
-                interaction.guild?.id!
+                interaction.guild?.id!,
             ),
         ];
 
-        if (results.length === 0) {
+        if (results.length === 0)
             results.push(noCommands);
-        }
+
 
         return results;
     },
 
     callback: async (commandUsage: CommandUsage) => {
-        const { instance, guild } = commandUsage;
+        const { instance, guild, } = commandUsage;
         const interaction =
             commandUsage.interaction as ChatInputCommandInteraction;
 
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content:
                     "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
+
 
         const sub = interaction.options.getSubcommand();
 
         if (sub === "create") {
             const commandName = interaction.options.getString(
-                "command"
+                "command",
             ) as string;
             const description = interaction.options.getString(
-                "description"
+                "description",
             ) as string;
             const response = interaction.options.getString(
-                "response"
+                "response",
             ) as string;
 
             await instance.commandHandler.customCommands.create(
                 guild!.id,
                 commandName,
                 description,
-                response
+                response,
             );
 
             return {
-                content: `Custom command "${commandName}" has been created!`,
+                content: `Custom command "${ commandName }" has been created!`,
                 ephemeral: true,
             };
-        } else if (sub === "delete") {
+        } if (sub === "delete") {
             const commandName = interaction.options.getString(
-                "command"
+                "command",
             ) as string;
 
-            if (commandName === noCommands) {
+            if (commandName === noCommands)
                 return {
                     content: "There are no custom commands to delete.",
                     ephemeral: true,
                 };
-            }
+
 
             await instance.commandHandler.customCommands.delete(
                 guild!.id,
-                commandName
+                commandName,
             );
 
             return {
-                content: `Custom command "${commandName}" has been deleted!`,
+                content: `Custom command "${ commandName }" has been deleted!`,
                 ephemeral: true,
             };
         }

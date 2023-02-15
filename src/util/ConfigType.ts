@@ -42,4 +42,4 @@ enum ConfigType {
 
 export default ConfigType;
 
-// Todo: automaticky importovat init v config cmd
+// !Todo: automaticky importovat init v config cmd

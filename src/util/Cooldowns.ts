@@ -1,6 +1,6 @@
 import CooldownTypes from "../util/CooldownTypes";
 import DCMD, { CooldownConfig, InternalCooldownConfig } from "../../typings";
-import { CooldownTypeorm } from "../models/cooldown-typeorm";
+import { CooldownEntity } from "../models/CooldownEntity";
 import { LessThan } from "typeorm";
 import { ds } from "../DCMD";
 
@@ -19,7 +19,7 @@ class Cooldowns {
     private _dbRequired: number;
 
     constructor(instance: DCMD, cooldownConfig: CooldownConfig) {
-        const { errorMessage, botOwnersBypass, dbRequired } = cooldownConfig;
+        const { errorMessage, botOwnersBypass, dbRequired, } = cooldownConfig;
 
         this._instance = instance;
         this._errorMessage = errorMessage;
@@ -30,20 +30,18 @@ class Cooldowns {
     }
 
     private async loadCooldowns() {
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return;
-        }
 
-        const repo = await ds.getRepository(CooldownTypeorm);
 
-        await repo.delete({
-            expires: LessThan(new Date()),
-        });
+        const repo = await ds.getRepository(CooldownEntity);
+
+        await repo.delete({ expires: LessThan(new Date()), });
 
         const results = await repo.find();
 
         for (const result of results) {
-            const _id = `${result.guildId}-${result.cmdId}`;
+            const _id = `${ result.guildId }-${ result.cmdId }`;
             const expires = result.expires;
 
             this._cooldowns.set(_id, expires);
@@ -51,7 +49,7 @@ class Cooldowns {
     }
 
     public getKeyFromCooldownUsage(cooldownUsage: InternalCooldownConfig) {
-        const { cooldownType, userId, actionId, guildId } = cooldownUsage;
+        const { cooldownType, userId, actionId, guildId, } = cooldownUsage;
 
         return this.getKey(cooldownType, userId, actionId, guildId);
     }
@@ -64,7 +62,7 @@ class Cooldowns {
         if (this._instance.isConnectedToMariaDB) {
             // await cooldownSchema.deleteOne({ _id: key });
             // const ds = this._instance.dataSource;
-            const repo = await ds.getRepository(CooldownTypeorm);
+            const repo = await ds.getRepository(CooldownEntity);
             await repo.delete({
                 guildId: key.split("-")[0],
                 cmdId: key.split("-")[1],
@@ -74,64 +72,62 @@ class Cooldowns {
 
     public async updateCooldown(
         cooldownUsage: InternalCooldownConfig,
-        expires: Date
+        expires: Date,
     ) {
         const key = this.getKeyFromCooldownUsage(cooldownUsage);
 
         this._cooldowns.set(key, expires);
 
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return;
-        }
+
 
         const now = new Date();
         const secondsDiff = (expires.getTime() - now.getTime()) / 1000;
 
         if (secondsDiff > this._dbRequired) {
             // const ds = this._instance.dataSource;
-            const repo = await ds.getRepository(CooldownTypeorm);
+            const repo = await ds.getRepository(CooldownEntity);
 
             await repo.update(
                 {
                     guildId: key.split("-")[0],
                     cmdId: key.split("-")[1],
                 },
-                {
-                    expires: expires,
-                }
+                { expires: expires, },
             );
         }
     }
 
     public verifyCooldown(duration: number | string) {
-        if (typeof duration === "number") {
+        if (typeof duration === "number")
             return duration;
-        }
+
 
         const split = duration.split(" ");
 
-        if (split.length !== 2) {
+        if (split.length !== 2)
             throw new Error(
-                `Duration "${duration}" is an invalid duration. Please use "10 m", "15 s" etc.`
+                `Duration "${ duration }" is an invalid duration. Please use "10 m", "15 s" etc.`,
             );
-        }
 
-        const quantity = +split[0];
+
+        const quantity = Number(split[0]);
         const type = split[1].toLowerCase();
 
-        if (!cooldownDurations[type]) {
+        if (!cooldownDurations[type])
             throw new Error(
-                `Unknown duration type "${type}". Please use one of the following: ${Object.keys(
-                    cooldownDurations
-                )}`
+                `Unknown duration type "${ type }". Please use one of the following: ${ Object.keys(
+                    cooldownDurations,
+                ) }`,
             );
-        }
 
-        if (quantity <= 0) {
+
+        if (quantity <= 0)
             throw new Error(
-                `Invalid quantity of "${quantity}". Please use a value greater than 0.`
+                `Invalid quantity of "${ quantity }". Please use a value greater than 0.`,
             );
-        }
+
 
         return quantity * cooldownDurations[type];
     }
@@ -140,7 +136,7 @@ class Cooldowns {
         cooldownType: CooldownTypes,
         userId: string,
         actionId: string,
-        guildId?: string
+        guildId?: string,
     ): string {
         const isPerUser = cooldownType === CooldownTypes.perUser;
         const isPerUserPerGuild =
@@ -148,27 +144,27 @@ class Cooldowns {
         const isPerGuild = cooldownType === CooldownTypes.perGuild;
         const isGlobal = cooldownType === CooldownTypes.global;
 
-        if ((isPerUserPerGuild || isPerGuild) && !guildId) {
+        if ((isPerUserPerGuild || isPerGuild) && !guildId)
             throw new Error(
-                `Invalid cooldown type "${cooldownType}" used outside of a guild.`
+                `Invalid cooldown type "${ cooldownType }" used outside of a guild.`,
             );
-        }
 
-        if (isPerUser) {
-            return `${userId}-${actionId}`;
-        }
 
-        if (isPerUserPerGuild) {
-            return `${userId}-${guildId}-${actionId}`;
-        }
+        if (isPerUser)
+            return `${ userId }-${ actionId }`;
 
-        if (isPerGuild) {
-            return `${guildId}-${actionId}`;
-        }
 
-        if (isGlobal) {
+        if (isPerUserPerGuild)
+            return `${ userId }-${ guildId }-${ actionId }`;
+
+
+        if (isPerGuild)
+            return `${ guildId }-${ actionId }`;
+
+
+        if (isGlobal)
             return actionId;
-        }
+
 
         return "ERROR";
     }
@@ -188,9 +184,9 @@ class Cooldowns {
             duration,
         } = cooldownUsage;
 
-        if (this.canBypass(userId)) {
+        if (this.canBypass(userId))
             return;
-        }
+
 
         const seconds = this.verifyCooldown(duration!);
 
@@ -204,16 +200,14 @@ class Cooldowns {
             seconds >= this._dbRequired
         ) {
             // const ds = this._instance.dataSource;
-            const repo = await ds.getRepository(CooldownTypeorm);
+            const repo = await ds.getRepository(CooldownEntity);
 
             await repo.update(
                 {
                     guildId: key.split("-")[0],
                     cmdId: key.split("-")[1],
                 },
-                {
-                    expires: expires,
-                }
+                { expires: expires, },
             );
         }
 
@@ -229,16 +223,16 @@ class Cooldowns {
             errorMessage = this._errorMessage,
         } = cooldownUsage;
 
-        if (this.canBypass(userId)) {
+        if (this.canBypass(userId))
             return true;
-        }
+
 
         const key = this.getKey(cooldownType, userId, actionId, guildId);
         const expires = this._cooldowns.get(key);
 
-        if (!expires) {
+        if (!expires)
             return true;
-        }
+
 
         const now = new Date();
         if (now > expires) {
@@ -253,10 +247,10 @@ class Cooldowns {
         const s = Math.floor(secondsDiff % 60);
 
         let time = "";
-        if (d > 0) time += `${d}d `;
-        if (h > 0) time += `${h}h `;
-        if (m > 0) time += `${m}m `;
-        time += `${s}s`;
+        if (d > 0) time += `${ d }d `;
+        if (h > 0) time += `${ h }h `;
+        if (m > 0) time += `${ m }m `;
+        time += `${ s }s`;
 
         return errorMessage.replace("{TIME}", time);
     }

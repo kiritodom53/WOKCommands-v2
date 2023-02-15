@@ -23,24 +23,20 @@ export default {
             description: "Message content",
             type: ApplicationCommandOptionType.String,
             required: true,
-            descriptionLocalizations: {
-                cs: "Obsah zprávy",
-            },
+            descriptionLocalizations: { cs: "Obsah zprávy", },
         },
         {
             name: "channel",
             description: "Text channel",
             type: ApplicationCommandOptionType.Channel,
             required: false,
-            descriptionLocalizations: {
-                cs: "Textový kanál",
-            },
+            descriptionLocalizations: { cs: "Textový kanál", },
             channelTypes: [ChannelType.GuildText],
         },
     ],
 
     callback: (commandUsage: CommandUsage) => {
-        const { instance, guild, channel, text: prefix } = commandUsage;
+        const { instance, guild, channel, text: prefix, } = commandUsage;
         const interaction: CommandInteraction = commandUsage.interaction!;
 
         let sendChannel: TextChannel | undefined = undefined;
@@ -53,12 +49,10 @@ export default {
             ? (intChannel as TextChannel)
             : (channel as TextChannel);
 
-        sendChannel.send({
-            content: intMessage,
-        });
+        sendChannel.send({ content: intMessage, });
 
         return {
-            content: `Zpráva byla úspěšně odeslána.`,
+            content: "Zpráva byla úspěšně odeslána.",
             ephemeral: true,
         };
     },

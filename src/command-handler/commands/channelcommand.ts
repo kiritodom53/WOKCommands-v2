@@ -1,8 +1,6 @@
-import {
-    ApplicationCommandOptionType,
+import { ApplicationCommandOptionType,
     CommandInteraction,
-    PermissionFlagsBits,
-} from "discord.js";
+    PermissionFlagsBits } from "discord.js";
 
 import Command from "../Command";
 import CommandType from "../../util/CommandType";
@@ -37,15 +35,15 @@ export default {
     },
 
     callback: async (commandUsage: CommandUsage) => {
-        const { instance, guild } = commandUsage;
+        const { instance, guild, } = commandUsage;
 
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content:
                     "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
+
 
         const interaction: CommandInteraction = commandUsage.interaction!;
 
@@ -55,16 +53,16 @@ export default {
         const channel = interaction.options.getChannel("channel");
 
         const command = instance.commandHandler.commands.get(
-            commandName.toLowerCase()
+            commandName.toLowerCase(),
         );
-        if (!command) {
+        if (!command)
             return {
-                content: `The command "${commandName}" does not exist.`,
+                content: `The command "${ commandName }" does not exist.`,
                 ephemeral: true,
             };
-        }
 
-        const { channelCommands } = instance.commandHandler;
+
+        const { channelCommands, } = instance.commandHandler;
 
         let availableChannels = [];
         // @ts-ignore
@@ -72,32 +70,32 @@ export default {
             await channelCommands.getAvailableChannels(guild!.id, commandName)
         ).includes(channel.id);
 
-        if (canRun) {
+        if (canRun)
             availableChannels = (await channelCommands.remove(
                 guild!.id,
                 commandName,
-                channel.id
+                channel.id,
             )) as string[];
-        } else {
+        else
             availableChannels = (await channelCommands.add(
                 guild!.id,
                 commandName,
-                channel.id
+                channel.id,
             )) as string[];
-        }
+
 
         if (availableChannels.length) {
             const channelNames = availableChannels.map(
-                (c: string) => `<#${c}> `
+                (c: string) => `<#${ c }> `,
             );
             return {
-                content: `The command "${commandName}" can now only be ran inside of the following channels: ${channelNames}`,
+                content: `The command "${ commandName }" can now only be ran inside of the following channels: ${ channelNames }`,
                 ephemeral: true,
             };
         }
 
         return {
-            content: `The command "${commandName}" can now be ran inside of any text channel.`,
+            content: `The command "${ commandName }" can now be ran inside of any text channel.`,
             ephemeral: true,
         };
     },

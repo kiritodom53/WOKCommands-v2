@@ -3,7 +3,7 @@ import { ApplicationCommandOptionType, PermissionFlagsBits } from "discord.js";
 import Command from "../Command";
 import CommandType from "../../util/CommandType";
 import { CommandUsage } from "../../../typings";
-import { discord_events } from "../../util/event-list";
+import { discordEvents } from "../../util/event-list";
 
 export default {
     description: "Simulate selected event",
@@ -27,7 +27,7 @@ export default {
 
     autocomplete: (command: Command) => {
         // return [...command.instance.commandHandler.configs];
-        return discord_events;
+        return discordEvents;
     },
 
     callback: async (commandUsage: CommandUsage) => {
@@ -42,17 +42,17 @@ export default {
             client,
         } = commandUsage;
 
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content:
                     "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
 
-        if (!interaction!.isChatInputCommand()) {
+
+        if (!interaction!.isChatInputCommand())
             return;
-        }
+
 
         const event = interaction.options.getString("event") as string;
 
@@ -75,7 +75,7 @@ export default {
         }
 
         return {
-            content: `Event \`${event}\` was emitted!`,
+            content: `Event \`${ event }\` was emitted!`,
             ephemeral: true,
         };
     },

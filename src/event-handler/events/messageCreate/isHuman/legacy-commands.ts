@@ -3,19 +3,19 @@ import { Message } from "discord.js";
 import DCMD from "../../../../../typings";
 
 export default async (message: Message, instance: DCMD) => {
-    const { guild, content } = message;
+    const { guild, content, } = message;
 
-    const { commandHandler } = instance;
-    if (!commandHandler) {
+    const { commandHandler, } = instance;
+    if (!commandHandler)
         return;
-    }
 
-    const { prefixHandler, commands, customCommands } = commandHandler;
+
+    const { prefixHandler, commands, customCommands, } = commandHandler;
 
     const prefix = prefixHandler.get(guild?.id);
-    if (!content.startsWith(prefix)) {
+    if (!content.startsWith(prefix))
         return;
-    }
+
 
     const args = content.split(/\s+/);
     const commandName = args.shift()!.substring(prefix.length).toLowerCase();
@@ -26,28 +26,28 @@ export default async (message: Message, instance: DCMD) => {
         return;
     }
 
-    const { reply, deferReply } = command.commandObject;
+    const { reply, deferReply, } = command.commandObject;
 
-    if (deferReply) {
+    if (deferReply)
         message.channel.sendTyping();
-    }
 
-    // Todo: logování
+
+    // !Todo: logování
     await commandHandler.logCommand(command, message, "legacy");
 
     const response = await commandHandler.runCommand(
         command,
         args,
         message,
-        null
+        null,
     );
-    if (!response) {
+    if (!response)
         return;
-    }
 
-    if (reply) {
+
+    if (reply)
         message.reply(response).catch(() => {});
-    } else {
+    else
         message.channel.send(response).catch(() => {});
-    }
+
 };

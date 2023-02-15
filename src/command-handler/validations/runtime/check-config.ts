@@ -1,46 +1,44 @@
 import Command from "../../Command";
-import { ConfigTypeorm } from "../../../models/config-typeorm";
+import { ConfigEntity } from "../../../models/ConfigEntity";
 import { CommandUsage } from "../../../../typings";
 import { ds } from "../../../DCMD";
 
 export default async (command: Command, usage: CommandUsage) => {
-    const { configs } = command.commandObject;
-    const { commandName, instance } = command;
-    const { guild, channel, message, interaction } = usage;
+    const { configs, } = command.commandObject;
+    const { commandName, instance, } = command;
+    const { guild, channel, message, interaction, } = usage;
 
-    if (!guild || !instance.isConnectedToMariaDB) {
+    if (!guild || !instance.isConnectedToMariaDB)
         return true;
-    }
+
 
     const results = await ds
-        .getRepository(ConfigTypeorm)
+        .getRepository(ConfigEntity)
         .createQueryBuilder("c")
         .where("value is null")
-        .andWhere("`key` IN (:keys)", { keys: configs })
+        .andWhere("`key` IN (:keys)", { keys: configs, })
         .getRawMany();
 
-    if (!results) {
+    if (!results)
         return true;
-    }
 
-    if (results.length == 0) {
+
+    if (results.length == 0)
         return true;
-    }
 
-    let unsetConfigs: Map<string, string | null> = new Map<
+
+    const unsetConfigs: Map<string, string | null> = new Map<
         string,
         string | null
     >();
-    results.forEach((x) =>
-        unsetConfigs.set(x.c_key, !x.c_description ? null : x.c_description)
+    results.forEach((x) => unsetConfigs.set(x.c_key, !x.c_description ? null : x.c_description),
     );
 
-    let text = `This command require these configs to be set:\n`;
+    let text = "This command require these configs to be set:\n";
     unsetConfigs.forEach(
-        (value, key) =>
-            (text += `> _${key}_:\n\`\`\`\n${
-                !value ? "Nemá popisek" : value
-            }\`\`\`\n`)
+        (value, key) => (text += `> _${ key }_:\n\`\`\`\n${
+            !value ? "Nemá popisek" : value
+        }\`\`\`\n`),
     );
 
     if (message) message.reply(text);

@@ -3,7 +3,10 @@ import CommandType from "../../util/CommandType";
 import { CommandObject, CommandUsage } from "../../../typings";
 import { migrateConfig } from "../../models/migrations/config-migration";
 
-const configs = ["configs", "users"];
+const configs = [
+    "configs",
+    "users",
+];
 
 export default {
     description: "Import important database data",
@@ -37,30 +40,29 @@ export default {
             interaction,
         } = commandUsage;
 
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content:
                     "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
 
-        if (!interaction!.isChatInputCommand()) {
+
+        if (!interaction!.isChatInputCommand())
             return;
-        }
+
 
         const type = interaction.options.getString("type");
 
-        if (!type) {
+        if (!type)
             await migrateConfig();
-        } else {
-            if (type == "config") {
-                await migrateConfig();
-            }
-        }
+        else
+        if (type == "config")
+            await migrateConfig();
+
 
         return {
-            content: `Migration of \`${!type ? "all" : type}\` was completed.`,
+            content: `Migration of \`${ !type ? "all" : type }\` was completed.`,
             ephemeral: true,
         };
     },

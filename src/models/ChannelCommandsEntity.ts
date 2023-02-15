@@ -1,13 +1,13 @@
 import { Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "required_roles" })
-export class RequiredRolesTypeorm {
+@Entity({ name: "channel_commands", })
+export class ChannelCommandsEntity {
     @PrimaryColumn()
     guildId: string;
 
     @PrimaryColumn()
-    cmdId: string;
+    commandId: string;
 
     @PrimaryColumn()
-    roleId: string;
+    channelId: string;
 }

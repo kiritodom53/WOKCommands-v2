@@ -1,8 +1,6 @@
-import {
-    ApplicationCommandOption,
+import { ApplicationCommandOption,
     ApplicationCommandOptionType,
-    Client,
-} from "discord.js";
+    Client } from "discord.js";
 
 class SlashCommands {
     private _client: Client;
@@ -17,9 +15,9 @@ class SlashCommands {
         if (guildId) {
             const guild = await this._client.guilds.fetch(guildId);
             commands = guild.commands;
-        } else {
+        } else
             commands = this._client.application?.commands;
-        }
+
 
         // @ts-ignore
         await commands?.fetch();
@@ -29,7 +27,7 @@ class SlashCommands {
 
     areOptionsDifferent(
         options: ApplicationCommandOption[],
-        existingOptions: any[]
+        existingOptions: any[],
     ) {
         for (let a = 0; a < options.length; ++a) {
             const option = options[a];
@@ -39,9 +37,9 @@ class SlashCommands {
                 option.name !== existing.name ||
                 option.type !== existing.type ||
                 option.description !== existing.description
-            ) {
+            )
                 return true;
-            }
+
         }
 
         return false;
@@ -51,12 +49,12 @@ class SlashCommands {
         name: string,
         description: string,
         options: ApplicationCommandOption[],
-        guildId?: string
+        guildId?: string,
     ) {
         const commands = await this.getCommands(guildId);
-        if (!commands) {
-            throw new Error(`Could not find commands for guild ${guildId}`);
-        }
+        if (!commands)
+            throw new Error(`Could not find commands for guild ${ guildId }`);
+
 
         const existingCommand = commands.cache.find((cmd) => cmd.name === name);
         if (existingCommand) {
@@ -70,7 +68,7 @@ class SlashCommands {
                 options.length !== existingOptions.length ||
                 this.areOptionsDifferent(options, existingOptions)
             ) {
-                console.log(`Updating the command "${name}"`);
+                console.log(`Updating the command "${ name }"`);
 
                 await commands.edit(existingCommand.id, {
                     description,
@@ -91,11 +89,11 @@ class SlashCommands {
         const commands = await this.getCommands(guildId);
 
         const existingCommand = commands?.cache.find(
-            (cmd) => cmd.name === commandName
+            (cmd) => cmd.name === commandName,
         );
-        if (!existingCommand) {
+        if (!existingCommand)
             return;
-        }
+
 
         await existingCommand.delete();
     }

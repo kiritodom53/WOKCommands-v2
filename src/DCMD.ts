@@ -28,7 +28,7 @@ class DssbCmdler {
     }
 
     private async init(options: Options) {
-        let {
+        const {
             client,
             commandsDir,
             featuresDir,
@@ -40,9 +40,9 @@ class DssbCmdler {
             validations = {},
         } = options;
 
-        if (!client) {
+        if (!client)
             throw new Error("A client is required.");
-        }
+
 
         await this.connectToMariaDb();
 
@@ -50,9 +50,9 @@ class DssbCmdler {
         if (botOwners.length === 0) {
             await client.application?.fetch();
             const ownerId = client.application?.owner?.id;
-            if (ownerId && botOwners.indexOf(ownerId) === -1) {
+            if (ownerId && botOwners.indexOf(ownerId) === -1)
                 botOwners.push(ownerId);
-            }
+
         }
 
         this._client = client;
@@ -69,22 +69,22 @@ class DssbCmdler {
             ...cooldownConfig,
         });
 
-        if (commandsDir) {
+        if (commandsDir)
             this._commandHandler = new CommandHandler(
                 this as unknown as DCMD,
                 commandsDir,
-                client
+                client,
             );
-        }
 
-        if (featuresDir) {
+
+        if (featuresDir)
             new FeaturesHandler(this as unknown as DCMD, featuresDir, client);
-        }
+
 
         this._eventHandler = new EventHandler(
             this as unknown as DCMD,
             events as Events,
-            client
+            client,
         );
     }
 
@@ -144,7 +144,7 @@ class DssbCmdler {
         console.log(
             process.env.LIVE == "true"
                 ? process.env.MARIADB_DATABASE
-                : process.env.MARIADB_DATABASE_TEST
+                : process.env.MARIADB_DATABASE_TEST,
         );
 
         this._isConnectedToMariaDB = true;

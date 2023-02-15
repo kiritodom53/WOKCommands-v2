@@ -1,23 +1,23 @@
-import { ChannelCommandsTypeorm } from "./channel-commands-typeorm";
-import { CooldownTypeorm } from "./cooldown-typeorm";
-import { CustomCommandTypeorm } from "./custom-command-typeorm";
-import { DisabledCommandsTypeorm } from "./disabled-commands-typeorm";
-import { GuildPrefixTypeorm } from "./guild-prefix-typeorm";
-import { RequiredPermissionsTypeorm } from "./required-permissions-typeorm";
-import { RequiredRolesTypeorm } from "./required-roles-typeorm";
-import { ConfigTypeorm } from "./config-typeorm";
-import { CommandLogTypeorm } from "./command-log-typeorm";
+import { ChannelCommandsEntity } from "./ChannelCommandsEntity";
+import { CooldownEntity } from "./CooldownEntity";
+import { CustomCommandEntity } from "./CustomCommandEntity";
+import { DisabledCommandsEntity } from "./DisabledCommandsEntity";
+import { GuildPrefixEntity } from "./GuildPrefixEntity";
+import { RequiredPermissionsEntity } from "./RequiredPermissionsEntity";
+import { RequiredRolesEntity } from "./RequiredRolesEntity";
+import { ConfigEntity } from "./ConfigEntity";
+import { CommandLogEntity } from "./CommandLogEntity";
 
 export const DbModels = [
-    RequiredPermissionsTypeorm,
-    DisabledCommandsTypeorm,
-    ChannelCommandsTypeorm,
-    CustomCommandTypeorm,
-    RequiredRolesTypeorm,
-    GuildPrefixTypeorm,
-    CommandLogTypeorm,
-    CooldownTypeorm,
-    ConfigTypeorm,
+    RequiredPermissionsEntity,
+    DisabledCommandsEntity,
+    ChannelCommandsEntity,
+    CustomCommandEntity,
+    RequiredRolesEntity,
+    GuildPrefixEntity,
+    CommandLogEntity,
+    CooldownEntity,
+    ConfigEntity,
 ];
 
 export default DbModels;

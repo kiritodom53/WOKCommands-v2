@@ -10,7 +10,7 @@ class FeaturesHandler {
     private async readFiles(
         instance: DCMD,
         featuresDir: string,
-        client: Client
+        client: Client,
     ) {
         const files = getAllFiles(featuresDir);
 
@@ -18,9 +18,9 @@ class FeaturesHandler {
             let func = require(file.filePath);
             func = func.default || func;
 
-            if (func instanceof Function) {
+            if (func instanceof Function)
                 await func(instance, client);
-            }
+
         }
     }
 }

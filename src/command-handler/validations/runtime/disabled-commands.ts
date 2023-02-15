@@ -2,17 +2,17 @@ import Command from "../../Command";
 import { CommandUsage } from "../../../../typings";
 
 export default async (command: Command, usage: CommandUsage) => {
-    const { commandName, instance } = command;
-    const { guild, message, interaction } = usage;
+    const { commandName, instance, } = command;
+    const { guild, message, interaction, } = usage;
 
-    if (!guild || !instance.isConnectedToMariaDB) {
+    if (!guild || !instance.isConnectedToMariaDB)
         return true;
-    }
+
 
     if (
         instance.commandHandler.disabledCommands.isDisabled(
             guild.id,
-            commandName
+            commandName,
         )
     ) {
         const text = "This command is disabled";

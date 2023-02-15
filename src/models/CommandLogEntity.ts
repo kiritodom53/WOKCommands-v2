@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "command_logs" })
-export class CommandLogTypeorm {
-    @PrimaryColumn({ unique: true })
+@Entity({ name: "command_logs", })
+export class CommandLogEntity {
+    @PrimaryColumn({ unique: true, })
     guildId: string;
 
     @PrimaryColumn()
@@ -11,7 +11,7 @@ export class CommandLogTypeorm {
     @PrimaryColumn()
     userId: string;
 
-    @Column("varchar", { nullable: true })
+    @Column("varchar", { nullable: true, })
     data!: string | null;
 
     @Column()

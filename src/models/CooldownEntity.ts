@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "cooldown" })
-export class CooldownTypeorm {
+@Entity({ name: "cooldown", })
+export class CooldownEntity {
     @PrimaryColumn()
     guildId: string;
 

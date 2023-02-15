@@ -1,8 +1,6 @@
 import DCMD from "../../typings";
-import {
-    DisabledCommandsTypeorm,
-    findDisabledCommand,
-} from "../models/disabled-commands-typeorm";
+import { DisabledCommandsEntity,
+    findDisabledCommand } from "../models/DisabledCommandsEntity";
 import { ds } from "../DCMD";
 
 class DisabledCommands {
@@ -17,28 +15,28 @@ class DisabledCommands {
     }
 
     async loadDisabledCommands() {
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return;
-        }
+
 
         const results = await findDisabledCommand();
 
-        for (const result of results) {
-            this._disabledCommands.push(`${result.guildId}-${result.cmdName}`);
-        }
+        for (const result of results)
+            this._disabledCommands.push(`${ result.guildId }-${ result.cmdName }`);
+
     }
 
     async disable(guildId: string, commandName: string) {
         if (
             !this._instance.isConnectedToMariaDB ||
             this.isDisabled(guildId, commandName)
-        ) {
+        )
             return;
-        }
 
-        const _id = `${guildId}-${commandName}`;
+
+        const _id = `${ guildId }-${ commandName }`;
         this._disabledCommands.push(_id);
-        const repo = await ds.getRepository(DisabledCommandsTypeorm);
+        const repo = await ds.getRepository(DisabledCommandsEntity);
 
         try {
             await repo.save({
@@ -52,16 +50,16 @@ class DisabledCommands {
         if (
             !this._instance.isConnectedToMariaDB ||
             !this.isDisabled(guildId, commandName)
-        ) {
+        )
             return;
-        }
 
-        const _id = `${guildId}-${commandName}`;
+
+        const _id = `${ guildId }-${ commandName }`;
         this._disabledCommands = this._disabledCommands.filter(
-            (id) => id !== _id
+            (id) => id !== _id,
         );
 
-        const repo = await ds.getRepository(DisabledCommandsTypeorm);
+        const repo = await ds.getRepository(DisabledCommandsEntity);
         await repo.delete({
             guildId: guildId,
             cmdName: commandName,
@@ -69,7 +67,7 @@ class DisabledCommands {
     }
 
     isDisabled(guildId: string, commandName: string) {
-        return this._disabledCommands.includes(`${guildId}-${commandName}`);
+        return this._disabledCommands.includes(`${ guildId }-${ commandName }`);
     }
 }
 

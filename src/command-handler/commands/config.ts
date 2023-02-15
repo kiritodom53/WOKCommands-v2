@@ -4,7 +4,7 @@ import Command from "../Command";
 import CommandType from "../../util/CommandType";
 import { CommandObject, CommandUsage } from "../../../typings";
 import { ds } from "../../DCMD";
-import { ConfigTypeorm } from "../../models/config-typeorm";
+import { ConfigEntity } from "../../models/ConfigEntity";
 
 export default {
     description: "Toggles a command on or off for your guild",
@@ -43,28 +43,28 @@ export default {
             interaction,
         } = commandUsage;
 
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content:
                     "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
 
-        if (!interaction!.isChatInputCommand()) {
+
+        if (!interaction!.isChatInputCommand())
             return;
-        }
+
 
         const key = interaction.options.getString("command") as string;
         const value = interaction.options.getString("command") as string;
 
-        await ds.getRepository(ConfigTypeorm).save({
+        await ds.getRepository(ConfigEntity).save({
             key,
             value,
         });
 
         return {
-            content: `Konfigurace \`${key}\` byla nastavena na \`${value}\``,
+            content: `Konfigurace \`${ key }\` byla nastavena na \`${ value }\``,
             ephemeral: true,
         };
     },

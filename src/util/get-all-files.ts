@@ -4,23 +4,24 @@ import p from "path";
 import { FileData } from "../../typings";
 
 const getAllFiles = (path: string, foldersOnly = false) => {
-    const files = fs.readdirSync(path, {
-        withFileTypes: true,
-    });
+    const files = fs.readdirSync(path, { withFileTypes: true, });
     let filesFound: FileData[] = [];
 
     for (const file of files) {
         const filePath = p.join(path, file.name);
 
         if (file.isDirectory()) {
-            if (foldersOnly) {
+            if (foldersOnly)
                 filesFound.push({
                     filePath,
                     fileContents: file,
                 });
-            } else {
-                filesFound = [...filesFound, ...getAllFiles(filePath)];
-            }
+            else
+                filesFound = [
+                    ...filesFound,
+                    ...getAllFiles(filePath),
+                ];
+
             continue;
         }
 

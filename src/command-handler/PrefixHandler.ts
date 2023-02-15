@@ -1,5 +1,5 @@
 import DCMD from "../../typings";
-import { findPrefixes, setPrefix } from "../models/guild-prefix-typeorm";
+import { findPrefixes, setPrefix } from "../models/GuildPrefixEntity";
 
 class PrefixHandler {
     // <guildId: prefix>
@@ -14,16 +14,16 @@ class PrefixHandler {
     }
 
     private async loadPrefixes() {
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return;
-        }
+
 
         // const results = await guildPrefixSchema.find({});
         const results = await findPrefixes();
 
-        for (const result of results) {
+        for (const result of results)
             this._prefixes.set(result.guildId, result.prefix);
-        }
+
     }
 
     public get defaultPrefix() {
@@ -31,17 +31,17 @@ class PrefixHandler {
     }
 
     public get(guildId?: string) {
-        if (!guildId) {
+        if (!guildId)
             return this.defaultPrefix;
-        }
+
 
         return this._prefixes.get(guildId) || this.defaultPrefix;
     }
 
     public async set(guildId: string, prefix: string) {
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return;
-        }
+
 
         this._prefixes.set(guildId, prefix);
 

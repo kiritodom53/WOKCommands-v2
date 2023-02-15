@@ -15,14 +15,14 @@ import Cooldowns from "./src/util/Cooldowns";
 import DefaultCommands from "./src/util/DefaultCommands";
 import CommandHandler from "./src/command-handler/CommandHandler";
 import EventHandler from "./src/event-handler/EventHandler";
-import { RequiredPermissionsTypeorm } from "./src/models/required-permissions-typeorm";
-import { DisabledCommandsTypeorm } from "./src/models/disabled-commands-typeorm";
-import { ChannelCommandsTypeorm } from "./src/models/channel-commands-typeorm";
-import { CustomCommandTypeorm } from "./src/models/custom-command-typeorm";
-import { RequiredRolesTypeorm } from "./src/models/required-roles-typeorm";
-import { GuildPrefixTypeorm } from "./src/models/guild-prefix-typeorm";
-import { CooldownTypeorm } from "./src/models/cooldown-typeorm";
-import { ConfigTypeorm } from "./src/models/config-typeorm";
+import { RequiredPermissionsEntity } from "./src/models/RequiredPermissionsEntity";
+import { DisabledCommandsEntity } from "./src/models/DisabledCommandsEntity";
+import { ChannelCommandsEntity } from "./src/models/ChannelCommandsEntity";
+import { CustomCommandEntity } from "./src/models/CustomCommandEntity";
+import { RequiredRolesEntity } from "./src/models/RequiredRolesEntity";
+import { GuildPrefixEntity } from "./src/models/GuildPrefixEntity";
+import { CooldownEntity } from "./src/models/CooldownEntity";
+import { ConfigEntity } from "./src/models/ConfigEntity";
 import { IDbUser } from "./src/models/interfaces/IDbUser";
 
 export default class DCMD {
@@ -173,17 +173,19 @@ export class Command {
 }
 
 export {
+    // CommandObject,
+    // Command,
     CommandType,
     ConfigType,
     CooldownTypes,
     DefaultCommands,
-    RequiredPermissionsTypeorm,
-    DisabledCommandsTypeorm,
-    ChannelCommandsTypeorm,
-    CustomCommandTypeorm,
-    RequiredRolesTypeorm,
-    GuildPrefixTypeorm,
-    CooldownTypeorm,
-    ConfigTypeorm,
+    RequiredPermissionsEntity,
+    DisabledCommandsEntity,
+    ChannelCommandsEntity,
+    CustomCommandEntity,
+    RequiredRolesEntity,
+    GuildPrefixEntity,
+    CooldownEntity,
+    ConfigEntity,
     IDbUser,
 };

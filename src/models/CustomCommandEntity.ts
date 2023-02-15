@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "custom_command" })
-export class CustomCommandTypeorm {
+@Entity({ name: "custom_command", })
+export class CustomCommandEntity {
     @PrimaryColumn()
     guildId: string;
 

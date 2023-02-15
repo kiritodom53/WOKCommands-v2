@@ -3,7 +3,7 @@ import { ApplicationCommandOptionType, PermissionFlagsBits } from "discord.js";
 import CommandType from "../../util/CommandType";
 import { CommandObject, CommandUsage } from "../../../typings";
 import Command from "../Command";
-import { RequiredPermissionsTypeorm } from "../../models/required-permissions-typeorm";
+import { RequiredPermissionsEntity } from "../../models/RequiredPermissionsEntity";
 import { ds } from "../../DCMD";
 
 const clearAllPermissions = "Clear All Permissions";
@@ -34,72 +34,76 @@ export default {
     ],
 
     autocomplete: (command: Command, arg: string) => {
-        if (arg === "command") {
+        if (arg === "command")
             return [...command.instance.commandHandler.commands.keys()];
-        } else if (arg === "permission") {
-            return [clearAllPermissions, ...Object.keys(PermissionFlagsBits)];
-        }
+        if (arg === "permission")
+            return [
+                clearAllPermissions,
+                ...Object.keys(PermissionFlagsBits),
+            ];
+
     },
 
     callback: async (commandUsage: CommandUsage) => {
-        const { instance, guild, args } = commandUsage;
+        const { instance, guild, args, } = commandUsage;
 
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content:
                     "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
 
-        const [commandName, permission] = args;
+
+        const [
+            commandName,
+            permission,
+        ] = args;
 
         const command = instance.commandHandler.commands.get(commandName);
-        if (!command) {
+        if (!command)
             return {
-                content: `The command \`${commandName}\` does not exist.`,
+                content: `The command \`${ commandName }\` does not exist.`,
                 ephemeral: true,
             };
-        }
+
 
         // const _id = `${guild!.id}-${command.commandName}`;
-        const repo = await ds.getRepository(RequiredPermissionsTypeorm);
+        const repo = await ds.getRepository(RequiredPermissionsEntity);
 
         if (!permission) {
             const document = await repo.find();
 
-            let permissions: string = "";
+            let permissions = "";
             if (document && document.length > 0) {
-                for (const d of document) {
-                    permissions += `\`${d.permission}\`, `;
-                }
+                for (const d of document)
+                    permissions += `\`${ d.permission }\`, `;
+
                 permissions = permissions.slice(0, -2);
-            } else {
+            } else
                 permissions = "None.";
-            }
+
 
             return {
-                content: `Here are the permissions for \`${commandName}\`: ${permissions}`,
+                content: `Here are the permissions for \`${ commandName }\`: ${ permissions }`,
                 ephemeral: true,
             };
         }
 
         if (permission === clearAllPermissions) {
-            await repo.delete({
-                guildId: guild!.id,
-            });
+            await repo.delete({ guildId: guild!.id, });
 
             return {
-                content: `The command \`${commandName}\` no longer requires any permissions.`,
+                content: `The command \`${ commandName }\` no longer requires any permissions.`,
                 ephemeral: true,
             };
         }
 
         const alreadyExistsRaw = await repo
             .createQueryBuilder("rpt")
-            .where("guildId = :guildId", { guildId: guild!.id })
-            .andWhere("cmdId = :cmdId", { cmdId: commandName })
-            .andWhere("permission IN (:values)", { values: permission })
+            .where("guildId = :guildId", { guildId: guild!.id, })
+            .andWhere("cmdId = :cmdId", { cmdId: commandName, })
+            .andWhere("permission IN (:values)", { values: permission, })
             .getRawOne();
 
         if (alreadyExistsRaw) {
@@ -110,7 +114,7 @@ export default {
             });
 
             return {
-                content: `The command \`${commandName}\` no longer requires the permission \`${permission}\``,
+                content: `The command \`${ commandName }\` no longer requires the permission \`${ permission }\``,
                 ephemeral: true,
             };
         }
@@ -122,7 +126,7 @@ export default {
         });
 
         return {
-            content: `The command \`${commandName}\` now requires the permission \`${permission}\``,
+            content: `The command \`${ commandName }\` now requires the permission \`${ permission }\``,
             ephemeral: true,
         };
     },

@@ -3,14 +3,14 @@ import { CommandInteraction } from "discord.js";
 import DCMD from "../../../../../typings";
 
 export default async (interaction: CommandInteraction, instance: DCMD) => {
-    const { commandHandler } = instance;
-    if (!commandHandler) {
+    const { commandHandler, } = instance;
+    if (!commandHandler)
         return;
-    }
 
-    const { commands, customCommands } = commandHandler;
 
-    const args = interaction.options.data.map(({ value }) => {
+    const { commands, customCommands, } = commandHandler;
+
+    const args = interaction.options.data.map(({ value, }) => {
         return String(value);
     });
 
@@ -20,13 +20,11 @@ export default async (interaction: CommandInteraction, instance: DCMD) => {
         return;
     }
 
-    const { deferReply } = command.commandObject;
+    const { deferReply, } = command.commandObject;
 
-    if (deferReply) {
-        await interaction.deferReply({
-            ephemeral: deferReply === "ephemeral",
-        });
-    }
+    if (deferReply)
+        await interaction.deferReply({ ephemeral: deferReply === "ephemeral", });
+
 
     // Todo: logování
     await commandHandler.logCommand(command, interaction, "slash");
@@ -35,15 +33,15 @@ export default async (interaction: CommandInteraction, instance: DCMD) => {
         command,
         args,
         null,
-        interaction
+        interaction,
     );
-    if (!response) {
+    if (!response)
         return;
-    }
 
-    if (deferReply) {
+
+    if (deferReply)
         interaction.editReply(response).catch(() => {});
-    } else {
+    else
         interaction.reply(response).catch(() => {});
-    }
+
 };

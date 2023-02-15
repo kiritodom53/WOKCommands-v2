@@ -17,15 +17,13 @@ import CustomCommands from "./CustomCommands";
 import DisabledCommands from "./DisabledCommands";
 import PrefixHandler from "./PrefixHandler";
 import CommandType from "../util/CommandType";
-import DCMD, {
-    CommandObject,
+import DCMD, { CommandObject,
     CommandUsage,
-    InternalCooldownConfig,
-} from "../../typings";
+    InternalCooldownConfig } from "../../typings";
 import DefaultCommands from "../util/DefaultCommands";
-import { ConfigTypeorm } from "../models/config-typeorm";
+import { ConfigEntity } from "../models/ConfigEntity";
 import { ds } from "../DCMD";
-import { CommandLogTypeorm } from "../models/command-log-typeorm";
+import { CommandLogEntity } from "../models/CommandLogEntity";
 import { currentDateCZE } from "../util/base-utils";
 import ConfigType from "../util/ConfigType";
 
@@ -34,7 +32,7 @@ class CommandHandler {
     private _configs: Array<string> = [];
     private _commands: Map<string, Command> = new Map();
     private _validations = this.getValidations(
-        path.join(__dirname, "validations", "runtime")
+        path.join(__dirname, "validations", "runtime"),
     );
     private _instance: DCMD;
     private _client: Client;
@@ -95,15 +93,15 @@ class CommandHandler {
 
     private async loadConfigs() {
         console.log("load config");
-        const configs = await ds.getRepository(ConfigTypeorm).find();
+        const configs = await ds.getRepository(ConfigEntity).find();
 
-        if (!configs) {
+        if (!configs)
             return (this._configs = []);
-        }
 
-        for (const config of configs) {
+
+        for (const config of configs)
             this._configs.push(config.key);
-        }
+
     }
 
     private async readFiles() {
@@ -111,13 +109,16 @@ class CommandHandler {
         const files = getAllFiles(this._commandsDir);
         const validations = [
             ...this.getValidations(
-                path.join(__dirname, "validations", "syntax")
+                path.join(__dirname, "validations", "syntax"),
             ),
             ...this.getValidations(this._instance.validations?.syntax),
         ];
 
-        for (let fileData of [...defaultCommands, ...files]) {
-            const { filePath } = fileData;
+        for (const fileData of [
+            ...defaultCommands,
+            ...files,
+        ]) {
+            const { filePath, } = fileData;
             const commandObject: CommandObject = fileData.fileContents;
 
             const split = filePath.split(/[\/\\]/);
@@ -127,7 +128,7 @@ class CommandHandler {
             const command = new Command(
                 this._instance,
                 commandName,
-                commandObject
+                commandObject,
             );
 
             const {
@@ -141,70 +142,75 @@ class CommandHandler {
 
             let defaultCommandValue: DefaultCommands | undefined;
 
-            for (const [key, value] of Object.entries(DefaultCommands)) {
+            for (const [
+                key,
+                value,
+            ] of Object.entries(DefaultCommands))
                 if (value === commandName.toLowerCase()) {
                     defaultCommandValue =
                         DefaultCommands[key as keyof typeof DefaultCommands];
                     break;
                 }
-            }
+
 
             if (
                 del ||
                 (defaultCommandValue &&
                     this._instance.disabledDefaultCommands.includes(
-                        defaultCommandValue
+                        defaultCommandValue,
                     ))
             ) {
-                if (type === "SLASH" || type === "BOTH") {
-                    if (testOnly) {
-                        for (const guildId of this._instance.testServers) {
+                if (type === "SLASH" || type === "BOTH")
+                    if (testOnly)
+                        for (const guildId of this._instance.testServers)
                             this._slashCommands.delete(
                                 command.commandName,
-                                guildId
+                                guildId,
                             );
-                        }
-                    } else {
+
+                    else
                         this._slashCommands.delete(command.commandName);
-                    }
-                }
+
 
                 continue;
             }
 
-            for (const validation of validations) {
+            for (const validation of validations)
                 validation(command);
-            }
+
 
             await init(this._client, this._instance);
 
-            const names = [command.commandName, ...aliases];
+            const names = [
+                command.commandName,
+                ...aliases,
+            ];
 
-            for (const name of names) {
+            for (const name of names)
                 this._commands.set(name, command);
-            }
+
 
             if (type === "SLASH" || type === "BOTH") {
                 const options =
                     commandObject.options ||
                     this._slashCommands.createOptions(commandObject);
 
-                if (testOnly) {
-                    for (const guildId of this._instance.testServers) {
+                if (testOnly)
+                    for (const guildId of this._instance.testServers)
                         this._slashCommands.create(
                             command.commandName,
                             description!,
                             options,
-                            guildId
+                            guildId,
                         );
-                    }
-                } else {
+
+                else
                     this._slashCommands.create(
                         command.commandName,
                         description!,
-                        options
+                        options,
                     );
-                }
+
             }
         }
     }
@@ -213,9 +219,9 @@ class CommandHandler {
     public async logCommand(
         command: Command,
         interaction: CommandInteraction | Message,
-        cmdType: "slash" | "legacy"
+        cmdType: "slash" | "legacy",
     ) {
-        const { excludeLog } = command.commandObject;
+        const { excludeLog, } = command.commandObject;
         let guild: Guild;
         let guildId: string;
         let user: User;
@@ -232,11 +238,11 @@ class CommandHandler {
 
         // Todo: udělat i command na on/off logování určitých příkazů
         // Disable log for this command
-        if (excludeLog) {
+        if (excludeLog)
             return;
-        }
 
-        await ds.getRepository(CommandLogTypeorm).save({
+
+        await ds.getRepository(CommandLogEntity).save({
             guildId: guildId!,
             userId: user.id,
             commandId: command.commandName,
@@ -245,40 +251,38 @@ class CommandHandler {
             cmdType: cmdType,
         });
 
-        const logChannelConfig = await ConfigTypeorm.findByKey(
-            ConfigType.LOG_TRIGGERED_CMD_CHANNEL_ID
+        const logChannelConfig = await ConfigEntity.findByKey(
+            ConfigType.LOG_TRIGGERED_CMD_CHANNEL_ID,
         );
 
-        if (logChannelConfig) {
+        if (logChannelConfig)
             return;
-        }
 
-        if (!logChannelConfig!.value) {
+
+        if (!logChannelConfig!.value)
             return;
-        }
+
 
         const logChannel = guild!.channels.cache.get(
-            logChannelConfig!.value!
+            logChannelConfig!.value!,
         ) as TextChannel;
 
-        logChannel.send({
-            content: `Command \`${command.commandName}\` was triggered by <@${
-                user.id
-            }> at <t:${currentDateCZE("unix_timestamp")}>.`,
-        });
+        logChannel.send({ content: `Command \`${ command.commandName }\` was triggered by <@${
+            user.id
+        }> at <t:${ currentDateCZE("unix_timestamp") }>.`, });
     }
 
     public async runCommand(
         command: Command,
         args: string[],
         message: Message | null,
-        interaction: CommandInteraction | null
+        interaction: CommandInteraction | null,
     ) {
-        const { callback, type, cooldowns } = command.commandObject;
+        const { callback, type, cooldowns, } = command.commandObject;
 
-        if (message && type === CommandType.SLASH) {
+        if (message && type === CommandType.SLASH)
             return;
-        }
+
 
         const guild = message ? message.guild : interaction?.guild;
         const member = (
@@ -302,23 +306,22 @@ class CommandHandler {
             channel,
         };
 
-        for (const validation of this._validations) {
+        for (const validation of this._validations)
             if (
                 !(await validation(
                     command,
                     usage,
-                    this._prefixes.get(guild?.id)
+                    this._prefixes.get(guild?.id),
                 ))
-            ) {
+            )
                 return;
-            }
-        }
+
 
         if (cooldowns) {
             const cooldownUsage: InternalCooldownConfig = {
                 cooldownType: cooldowns.type,
                 userId: user!.id,
-                actionId: `command_${command.commandName}`,
+                actionId: `command_${ command.commandName }`,
                 guildId: guild?.id,
                 duration: cooldowns.duration,
                 errorMessage: cooldowns.errorMessage,
@@ -327,9 +330,9 @@ class CommandHandler {
             const result =
                 this._instance.cooldowns?.canRunAction(cooldownUsage);
 
-            if (typeof result === "string") {
+            if (typeof result === "string")
                 return result;
-            }
+
 
             await this._instance.cooldowns?.start(cooldownUsage);
 
@@ -340,7 +343,7 @@ class CommandHandler {
             usage.updateCooldown = (expires: Date) => {
                 this._instance.cooldowns?.updateCooldown(
                     cooldownUsage,
-                    expires
+                    expires,
                 );
             };
         }
@@ -349,9 +352,9 @@ class CommandHandler {
     }
 
     private getValidations(folder?: string) {
-        if (!folder) {
+        if (!folder)
             return [];
-        }
+
 
         return getAllFiles(folder).map((fileData) => fileData.fileContents);
     }

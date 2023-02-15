@@ -8,7 +8,7 @@ class Command {
     constructor(
         instance: DCMD,
         commandName: string,
-        commandObject: CommandObject
+        commandObject: CommandObject,
     ) {
         this._instance = instance;
         this._commandName = commandName.toLowerCase();

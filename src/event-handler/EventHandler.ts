@@ -1,4 +1,6 @@
-import { Client, Interaction, InteractionType, Message } from "discord.js";
+import {
+    Client, Interaction, InteractionType, Message
+} from "discord.js";
 import path from "path";
 
 import getAllFiles from "../util/get-all-files";
@@ -22,15 +24,11 @@ class EventHandler {
         this._builtInEvents = {
             interactionCreate: {
                 isButton: (interaction: Interaction) => interaction.isButton(),
-                isCommand: (interaction: Interaction) =>
-                    interaction.type === InteractionType.ApplicationCommand,
-                isAutocomplete: (interaction: Interaction) =>
-                    interaction.type ===
+                isCommand: (interaction: Interaction) => interaction.type === InteractionType.ApplicationCommand,
+                isAutocomplete: (interaction: Interaction) => interaction.type ===
                     InteractionType.ApplicationCommandAutocomplete,
             },
-            messageCreate: {
-                isHuman: (message: Message) => !message.author.bot,
-            },
+            messageCreate: { isHuman: (message: Message) => !message.author.bot, },
         };
 
         this.readFiles();
@@ -43,13 +41,16 @@ class EventHandler {
             ? getAllFiles(this._eventsDir, true)
             : [];
 
-        for (const { filePath: folderPath } of [...defaultEvents, ...folders]) {
+        for (const { filePath: folderPath, } of [
+            ...defaultEvents,
+            ...folders,
+        ]) {
             const event = folderPath.split(/[\/\\]/g).pop()!;
             const files = getAllFiles(folderPath);
 
             const functions = this._eventCallbacks.get(event) || [];
 
-            for (const { filePath, fileContents } of files) {
+            for (const { filePath, fileContents, } of files) {
                 const isBuiltIn = !folderPath.includes(this._eventsDir);
                 const result = [fileContents];
 
@@ -60,14 +61,14 @@ class EventHandler {
                     isBuiltIn &&
                     this._builtInEvents[event] &&
                     this._builtInEvents[event][methodName]
-                ) {
+                )
                     result.push(this._builtInEvents[event][methodName]);
-                } else if (
+                else if (
                     this._events[event] &&
                     this._events[event][methodName]
-                ) {
+                )
                     result.push(this._events[event][methodName]);
-                }
+
 
                 functions.push(result);
             }
@@ -82,14 +83,17 @@ class EventHandler {
         for (const eventName of this._eventCallbacks.keys()) {
             const functions = this._eventCallbacks.get(eventName);
 
-            this._client.on(eventName, async function () {
-                for (const [func, dynamicValidation] of functions) {
+            this._client.on(eventName, async function() {
+                for (const [
+                    func,
+                    dynamicValidation,
+                ] of functions) {
                     if (
                         dynamicValidation &&
                         !(await dynamicValidation(...arguments))
-                    ) {
+                    )
                         continue;
-                    }
+
 
                     func(...arguments, instance);
                 }

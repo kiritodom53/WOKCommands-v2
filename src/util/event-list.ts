@@ -1,4 +1,4 @@
-export const discord_events = [
+export const discordEvents = [
     // "applicationCommandPermissionsUpdate",
     // "autoModerationActionExecution",
     // "autoModerationRuleCreate",
