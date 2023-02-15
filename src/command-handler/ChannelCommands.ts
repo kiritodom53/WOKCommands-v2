@@ -64,7 +64,7 @@ class ChannelCommands {
         const t = this._channelCommands.get(_id);
         const channels: Array<string> = !t ? [] : t;
 
-        if (!channels) {
+        if (channels.length === 0) {
             const result = await ds.getRepository(ChannelCommandsEntity).find();
             result.forEach((x) => channels.push(x.channelId));
             if (result.length < 1)

@@ -25,18 +25,16 @@ class DssbCmdler {
         this.init(options);
     }
     async init(options) {
-        let { client, commandsDir, featuresDir, testServers = [], botOwners = [], cooldownConfig, disabledDefaultCommands = [], events = {}, validations = {}, } = options;
-        if (!client) {
+        const { client, commandsDir, featuresDir, testServers = [], botOwners = [], cooldownConfig, disabledDefaultCommands = [], events = {}, validations = {}, } = options;
+        if (!client)
             throw new Error("A client is required.");
-        }
         await this.connectToMariaDb();
         // Add the bot owner's ID
         if (botOwners.length === 0) {
             await client.application?.fetch();
             const ownerId = client.application?.owner?.id;
-            if (ownerId && botOwners.indexOf(ownerId) === -1) {
+            if (ownerId && botOwners.indexOf(ownerId) === -1)
                 botOwners.push(ownerId);
-            }
         }
         this._client = client;
         this._testServers = testServers;
@@ -50,12 +48,10 @@ class DssbCmdler {
             dbRequired: 300,
             ...cooldownConfig,
         });
-        if (commandsDir) {
+        if (commandsDir)
             this._commandHandler = new CommandHandler_1.default(this, commandsDir, client);
-        }
-        if (featuresDir) {
+        if (featuresDir)
             new FeaturesHandler_1.default(this, featuresDir, client);
-        }
         this._eventHandler = new EventHandler_1.default(this, events, client);
     }
     get client() {
@@ -95,7 +91,7 @@ class DssbCmdler {
             database: process.env.LIVE == "true"
                 ? process.env.MARIADB_DATABASE
                 : process.env.MARIADB_DATABASE_TEST,
-            synchronize: process.env.LIVE != "true",
+            synchronize: false,
             entities: index_model_1.default,
         });
         await exports.ds.initialize();

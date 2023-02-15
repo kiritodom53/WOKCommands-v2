@@ -9,26 +9,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequiredRolesTypeorm = void 0;
+exports.CommandLogEntity = void 0;
 const typeorm_1 = require("typeorm");
-let RequiredRolesTypeorm = class RequiredRolesTypeorm {
+let CommandLogEntity = class CommandLogEntity {
     guildId;
-    cmdId;
-    roleId;
+    commandId;
+    userId;
+    data;
+    cmdType;
+    triggeredAtCTS;
+    triggeredAtUTS;
 };
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryColumn)({ unique: true, }),
     __metadata("design:type", String)
-], RequiredRolesTypeorm.prototype, "guildId", void 0);
+], CommandLogEntity.prototype, "guildId", void 0);
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], RequiredRolesTypeorm.prototype, "cmdId", void 0);
+], CommandLogEntity.prototype, "commandId", void 0);
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], RequiredRolesTypeorm.prototype, "roleId", void 0);
-RequiredRolesTypeorm = __decorate([
-    (0, typeorm_1.Entity)({ name: "required_roles" })
-], RequiredRolesTypeorm);
-exports.RequiredRolesTypeorm = RequiredRolesTypeorm;
+], CommandLogEntity.prototype, "userId", void 0);
+__decorate([
+    (0, typeorm_1.Column)("varchar", { nullable: true, }),
+    __metadata("design:type", Object)
+], CommandLogEntity.prototype, "data", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CommandLogEntity.prototype, "cmdType", void 0);
+__decorate([
+    (0, typeorm_1.PrimaryColumn)(),
+    __metadata("design:type", Date)
+], CommandLogEntity.prototype, "triggeredAtCTS", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CommandLogEntity.prototype, "triggeredAtUTS", void 0);
+CommandLogEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: "command_log", })
+], CommandLogEntity);
+exports.CommandLogEntity = CommandLogEntity;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.discord_events = void 0;
-exports.discord_events = [
+exports.discordEvents = void 0;
+exports.discordEvents = [
     // "applicationCommandPermissionsUpdate",
     // "autoModerationActionExecution",
     // "autoModerationRuleCreate",

@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DbModels = void 0;
-const channel_commands_typeorm_1 = require("./channel-commands-typeorm");
-const cooldown_typeorm_1 = require("./cooldown-typeorm");
-const custom_command_typeorm_1 = require("./custom-command-typeorm");
-const disabled_commands_typeorm_1 = require("./disabled-commands-typeorm");
-const guild_prefix_typeorm_1 = require("./guild-prefix-typeorm");
-const required_permissions_typeorm_1 = require("./required-permissions-typeorm");
-const required_roles_typeorm_1 = require("./required-roles-typeorm");
-const config_typeorm_1 = require("./config-typeorm");
-const command_log_typeorm_1 = require("./command-log-typeorm");
+const ChannelCommandsEntity_1 = require("./ChannelCommandsEntity");
+const CooldownEntity_1 = require("./CooldownEntity");
+const CustomCommandEntity_1 = require("./CustomCommandEntity");
+const DisabledCommandsEntity_1 = require("./DisabledCommandsEntity");
+const GuildPrefixEntity_1 = require("./GuildPrefixEntity");
+const RequiredPermissionsEntity_1 = require("./RequiredPermissionsEntity");
+const RequiredRolesEntity_1 = require("./RequiredRolesEntity");
+const ConfigEntity_1 = require("./ConfigEntity");
+const CommandLogEntity_1 = require("./CommandLogEntity");
 exports.DbModels = [
-    required_permissions_typeorm_1.RequiredPermissionsTypeorm,
-    disabled_commands_typeorm_1.DisabledCommandsTypeorm,
-    channel_commands_typeorm_1.ChannelCommandsTypeorm,
-    custom_command_typeorm_1.CustomCommandTypeorm,
-    required_roles_typeorm_1.RequiredRolesTypeorm,
-    guild_prefix_typeorm_1.GuildPrefixTypeorm,
-    command_log_typeorm_1.CommandLogTypeorm,
-    cooldown_typeorm_1.CooldownTypeorm,
-    config_typeorm_1.ConfigTypeorm,
+    RequiredPermissionsEntity_1.RequiredPermissionsEntity,
+    DisabledCommandsEntity_1.DisabledCommandsEntity,
+    ChannelCommandsEntity_1.ChannelCommandsEntity,
+    CustomCommandEntity_1.CustomCommandEntity,
+    RequiredRolesEntity_1.RequiredRolesEntity,
+    GuildPrefixEntity_1.GuildPrefixEntity,
+    CommandLogEntity_1.CommandLogEntity,
+    CooldownEntity_1.CooldownEntity,
+    ConfigEntity_1.ConfigEntity,
 ];
 exports.default = exports.DbModels;

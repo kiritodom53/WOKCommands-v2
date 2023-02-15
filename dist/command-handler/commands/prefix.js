@@ -14,13 +14,12 @@ exports.default = {
     guildOnly: true,
     permissions: [discord_js_1.PermissionFlagsBits.Administrator],
     callback: (commandUsage) => {
-        const { instance, guild, text: prefix } = commandUsage;
-        if (!instance.isConnectedToMariaDB) {
+        const { instance, guild, text: prefix, } = commandUsage;
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
         instance.commandHandler.prefixHandler.set(guild.id, prefix);
         return {
             content: `Set "${prefix}" as the command prefix for this server.`,

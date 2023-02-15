@@ -1,16 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = async (message, instance) => {
-    const { guild, content } = message;
-    const { commandHandler } = instance;
-    if (!commandHandler) {
+    const { guild, content, } = message;
+    const { commandHandler, } = instance;
+    if (!commandHandler)
         return;
-    }
-    const { prefixHandler, commands, customCommands } = commandHandler;
+    const { prefixHandler, commands, customCommands, } = commandHandler;
     const prefix = prefixHandler.get(guild?.id);
-    if (!content.startsWith(prefix)) {
+    if (!content.startsWith(prefix))
         return;
-    }
     const args = content.split(/\s+/);
     const commandName = args.shift().substring(prefix.length).toLowerCase();
     const command = commands.get(commandName);
@@ -18,20 +16,16 @@ exports.default = async (message, instance) => {
         customCommands.run(commandName, message, null);
         return;
     }
-    const { reply, deferReply } = command.commandObject;
-    if (deferReply) {
+    const { reply, deferReply, } = command.commandObject;
+    if (deferReply)
         message.channel.sendTyping();
-    }
-    // Todo: logování
+    // !Todo: logování
     await commandHandler.logCommand(command, message, "legacy");
     const response = await commandHandler.runCommand(command, args, message, null);
-    if (!response) {
+    if (!response)
         return;
-    }
-    if (reply) {
+    if (reply)
         message.reply(response).catch(() => { });
-    }
-    else {
+    else
         message.channel.send(response).catch(() => { });
-    }
 };

@@ -24,19 +24,17 @@ exports.default = {
     ],
     autocomplete: (command) => {
         // return [...command.instance.commandHandler.configs];
-        return event_list_1.discord_events;
+        return event_list_1.discordEvents;
     },
     callback: async (commandUsage) => {
         const { instance, guild, channel, member, message, text: commandName, interaction, client, } = commandUsage;
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
-        if (!interaction.isChatInputCommand()) {
+        if (!interaction.isChatInputCommand())
             return;
-        }
         const event = interaction.options.getString("event");
         switch (event) {
             case "guildCreate":

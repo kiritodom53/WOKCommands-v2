@@ -9,27 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findDisabledCommand = exports.DisabledCommandsTypeorm = void 0;
+exports.findDisabledCommand = exports.DisabledCommandsEntity = void 0;
 const typeorm_1 = require("typeorm");
 const DCMD_1 = require("../DCMD");
-let DisabledCommandsTypeorm = class DisabledCommandsTypeorm {
+let DisabledCommandsEntity = class DisabledCommandsEntity {
     guildId;
     cmdName;
 };
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], DisabledCommandsTypeorm.prototype, "guildId", void 0);
+], DisabledCommandsEntity.prototype, "guildId", void 0);
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], DisabledCommandsTypeorm.prototype, "cmdName", void 0);
-DisabledCommandsTypeorm = __decorate([
-    (0, typeorm_1.Entity)({ name: "disabled_command" })
-], DisabledCommandsTypeorm);
-exports.DisabledCommandsTypeorm = DisabledCommandsTypeorm;
+], DisabledCommandsEntity.prototype, "cmdName", void 0);
+DisabledCommandsEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: "disabled_command", })
+], DisabledCommandsEntity);
+exports.DisabledCommandsEntity = DisabledCommandsEntity;
 const findDisabledCommand = async () => {
-    const repo = await DCMD_1.ds.getRepository(DisabledCommandsTypeorm);
+    const repo = await DCMD_1.ds.getRepository(DisabledCommandsEntity);
     const result = await repo.find();
     return !result ? [] : result;
 };

@@ -43,4 +43,4 @@ var ConfigType;
     ConfigType["NOTICE_BOARD_CHANNEL_ID"] = "notice-board-channel-id";
 })(ConfigType || (ConfigType = {}));
 exports.default = ConfigType;
-// Todo: automaticky importovat init v config cmd
+// !Todo: automaticky importovat init v config cmd

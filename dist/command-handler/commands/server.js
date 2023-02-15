@@ -19,15 +19,15 @@ exports.default = {
         },
     ],
     callback: async (commandUsage) => {
-        const { instance, guild } = commandUsage;
+        const { instance, guild, } = commandUsage;
         const interaction = commandUsage.interaction;
         const sub = interaction.options.getSubcommand();
         if (sub === "load") {
-            const { heapUsed, rss } = process.memoryUsage();
+            const { heapUsed, rss, } = process.memoryUsage();
             const usedMemory = heapUsed / 1024 / 1024;
             const usedRss = rss / 1024 / 1024;
             const response = `Aktuální zatížení serveru: ${usedMemory.toFixed(2)} MB (Heap) a ${usedRss.toFixed(2)} MB (RSS)`;
-            return { content: response };
+            return { content: response, };
         }
     },
 };

@@ -14,11 +14,12 @@ const DisabledCommands_1 = __importDefault(require("./DisabledCommands"));
 const PrefixHandler_1 = __importDefault(require("./PrefixHandler"));
 const CommandType_1 = __importDefault(require("../util/CommandType"));
 const DefaultCommands_1 = __importDefault(require("../util/DefaultCommands"));
-const config_typeorm_1 = require("../models/config-typeorm");
+const ConfigEntity_1 = require("../models/ConfigEntity");
 const DCMD_1 = require("../DCMD");
-const command_log_typeorm_1 = require("../models/command-log-typeorm");
+const CommandLogEntity_1 = require("../models/CommandLogEntity");
 const base_utils_1 = require("../util/base-utils");
 const ConfigType_1 = __importDefault(require("../util/ConfigType"));
+const GuildConfigEntity_1 = require("../models/GuildConfigEntity");
 class CommandHandler {
     // <commandName, instance of the Command class>
     _configs = [];
@@ -71,13 +72,11 @@ class CommandHandler {
     }
     async loadConfigs() {
         console.log("load config");
-        const configs = await DCMD_1.ds.getRepository(config_typeorm_1.ConfigTypeorm).find();
-        if (!configs) {
+        const configs = await DCMD_1.ds.getRepository(ConfigEntity_1.ConfigEntity).find();
+        if (!configs)
             return (this._configs = []);
-        }
-        for (const config of configs) {
+        for (const config of configs)
             this._configs.push(config.key);
-        }
     }
     async readFiles() {
         const defaultCommands = (0, get_all_files_1.default)(path_1.default.join(__dirname, "./commands"));
@@ -86,8 +85,11 @@ class CommandHandler {
             ...this.getValidations(path_1.default.join(__dirname, "validations", "syntax")),
             ...this.getValidations(this._instance.validations?.syntax),
         ];
-        for (let fileData of [...defaultCommands, ...files]) {
-            const { filePath } = fileData;
+        for (const fileData of [
+            ...defaultCommands,
+            ...files,
+        ]) {
+            const { filePath, } = fileData;
             const commandObject = fileData.fileContents;
             const split = filePath.split(/[\/\\]/);
             let commandName = split.pop();
@@ -95,53 +97,46 @@ class CommandHandler {
             const command = new Command_1.default(this._instance, commandName, commandObject);
             const { description, type, testOnly, delete: del, aliases = [], init = () => { }, } = commandObject;
             let defaultCommandValue;
-            for (const [key, value] of Object.entries(DefaultCommands_1.default)) {
+            for (const [key, value,] of Object.entries(DefaultCommands_1.default))
                 if (value === commandName.toLowerCase()) {
                     defaultCommandValue =
                         DefaultCommands_1.default[key];
                     break;
                 }
-            }
             if (del ||
                 (defaultCommandValue &&
                     this._instance.disabledDefaultCommands.includes(defaultCommandValue))) {
-                if (type === "SLASH" || type === "BOTH") {
-                    if (testOnly) {
-                        for (const guildId of this._instance.testServers) {
+                if (type === "SLASH" || type === "BOTH")
+                    if (testOnly)
+                        for (const guildId of this._instance.testServers)
                             this._slashCommands.delete(command.commandName, guildId);
-                        }
-                    }
-                    else {
+                    else
                         this._slashCommands.delete(command.commandName);
-                    }
-                }
                 continue;
             }
-            for (const validation of validations) {
+            for (const validation of validations)
                 validation(command);
-            }
             await init(this._client, this._instance);
-            const names = [command.commandName, ...aliases];
-            for (const name of names) {
+            const names = [
+                command.commandName,
+                ...aliases,
+            ];
+            for (const name of names)
                 this._commands.set(name, command);
-            }
             if (type === "SLASH" || type === "BOTH") {
                 const options = commandObject.options ||
                     this._slashCommands.createOptions(commandObject);
-                if (testOnly) {
-                    for (const guildId of this._instance.testServers) {
+                if (testOnly)
+                    for (const guildId of this._instance.testServers)
                         this._slashCommands.create(command.commandName, description, options, guildId);
-                    }
-                }
-                else {
+                else
                     this._slashCommands.create(command.commandName, description, options);
-                }
             }
         }
     }
     // Todo: logování
     async logCommand(command, interaction, cmdType) {
-        const { excludeLog } = command.commandObject;
+        const { excludeLog, } = command.commandObject;
         let guild;
         let guildId;
         let user;
@@ -157,10 +152,9 @@ class CommandHandler {
         }
         // Todo: udělat i command na on/off logování určitých příkazů
         // Disable log for this command
-        if (excludeLog) {
+        if (excludeLog)
             return;
-        }
-        await DCMD_1.ds.getRepository(command_log_typeorm_1.CommandLogTypeorm).save({
+        await DCMD_1.ds.getRepository(CommandLogEntity_1.CommandLogEntity).save({
             guildId: guildId,
             userId: user.id,
             commandId: command.commandName,
@@ -168,23 +162,18 @@ class CommandHandler {
             triggeredAtUTS: (0, base_utils_1.currentDateCZE)("unix_timestamp").toString(),
             cmdType: cmdType,
         });
-        const logChannelConfig = await config_typeorm_1.ConfigTypeorm.findByKey(ConfigType_1.default.LOG_TRIGGERED_CMD_CHANNEL_ID);
-        if (logChannelConfig) {
+        const logChannelConfig = await GuildConfigEntity_1.GuildConfigEntity.findByKey(guildId, ConfigType_1.default.LOG_TRIGGERED_CMD_CHANNEL_ID);
+        if (logChannelConfig)
             return;
-        }
-        if (!logChannelConfig.value) {
+        if (!logChannelConfig.value)
             return;
-        }
         const logChannel = guild.channels.cache.get(logChannelConfig.value);
-        logChannel.send({
-            content: `Command \`${command.commandName}\` was triggered by <@${user.id}> at <t:${(0, base_utils_1.currentDateCZE)("unix_timestamp")}>.`,
-        });
+        logChannel.send({ content: `Command \`${command.commandName}\` was triggered by <@${user.id}> at <t:${(0, base_utils_1.currentDateCZE)("unix_timestamp")}>.`, });
     }
     async runCommand(command, args, message, interaction) {
-        const { callback, type, cooldowns } = command.commandObject;
-        if (message && type === CommandType_1.default.SLASH) {
+        const { callback, type, cooldowns, } = command.commandObject;
+        if (message && type === CommandType_1.default.SLASH)
             return;
-        }
         const guild = message ? message.guild : interaction?.guild;
         const member = (message ? message.member : interaction?.member);
         const user = message ? message.author : interaction?.user;
@@ -201,11 +190,9 @@ class CommandHandler {
             user: user,
             channel,
         };
-        for (const validation of this._validations) {
-            if (!(await validation(command, usage, this._prefixes.get(guild?.id)))) {
+        for (const validation of this._validations)
+            if (!(await validation(command, usage, this._prefixes.get(guild?.id))))
                 return;
-            }
-        }
         if (cooldowns) {
             const cooldownUsage = {
                 cooldownType: cooldowns.type,
@@ -216,9 +203,8 @@ class CommandHandler {
                 errorMessage: cooldowns.errorMessage,
             };
             const result = this._instance.cooldowns?.canRunAction(cooldownUsage);
-            if (typeof result === "string") {
+            if (typeof result === "string")
                 return result;
-            }
             await this._instance.cooldowns?.start(cooldownUsage);
             usage.cancelCooldown = () => {
                 this._instance.cooldowns?.cancelCooldown(cooldownUsage);
@@ -230,9 +216,8 @@ class CommandHandler {
         return await callback(usage);
     }
     getValidations(folder) {
-        if (!folder) {
+        if (!folder)
             return [];
-        }
         return (0, get_all_files_1.default)(folder).map((fileData) => fileData.fileContents);
     }
 }

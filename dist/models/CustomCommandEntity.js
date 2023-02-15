@@ -9,26 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CooldownTypeorm = void 0;
+exports.CustomCommandEntity = void 0;
 const typeorm_1 = require("typeorm");
-let CooldownTypeorm = class CooldownTypeorm {
+let CustomCommandEntity = class CustomCommandEntity {
     guildId;
     cmdId;
-    expires;
+    response;
 };
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], CooldownTypeorm.prototype, "guildId", void 0);
+], CustomCommandEntity.prototype, "guildId", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], CooldownTypeorm.prototype, "cmdId", void 0);
+], CustomCommandEntity.prototype, "cmdId", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", Date)
-], CooldownTypeorm.prototype, "expires", void 0);
-CooldownTypeorm = __decorate([
-    (0, typeorm_1.Entity)({ name: "cooldown" })
-], CooldownTypeorm);
-exports.CooldownTypeorm = CooldownTypeorm;
+    __metadata("design:type", String)
+], CustomCommandEntity.prototype, "response", void 0);
+CustomCommandEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: "custom_command", })
+], CustomCommandEntity);
+exports.CustomCommandEntity = CustomCommandEntity;

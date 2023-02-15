@@ -16,23 +16,19 @@ exports.default = {
             description: "Message content",
             type: discord_js_1.ApplicationCommandOptionType.String,
             required: true,
-            descriptionLocalizations: {
-                cs: "Obsah zprávy",
-            },
+            descriptionLocalizations: { cs: "Obsah zprávy", },
         },
         {
             name: "channel",
             description: "Text channel",
             type: discord_js_1.ApplicationCommandOptionType.Channel,
             required: false,
-            descriptionLocalizations: {
-                cs: "Textový kanál",
-            },
+            descriptionLocalizations: { cs: "Textový kanál", },
             channelTypes: [discord_js_1.ChannelType.GuildText],
         },
     ],
     callback: (commandUsage) => {
-        const { instance, guild, channel, text: prefix } = commandUsage;
+        const { instance, guild, channel, text: prefix, } = commandUsage;
         const interaction = commandUsage.interaction;
         let sendChannel = undefined;
         // @ts-ignore
@@ -42,11 +38,9 @@ exports.default = {
         sendChannel = intChannel
             ? intChannel
             : channel;
-        sendChannel.send({
-            content: intMessage,
-        });
+        sendChannel.send({ content: intMessage, });
         return {
-            content: `Zpráva byla úspěšně odeslána.`,
+            content: "Zpráva byla úspěšně odeslána.",
             ephemeral: true,
         };
     },

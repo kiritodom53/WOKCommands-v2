@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const channel_commands_typeorm_1 = require("../models/channel-commands-typeorm");
+const ChannelCommandsEntity_1 = require("../models/ChannelCommandsEntity");
 const DCMD_1 = require("../DCMD");
 class ChannelCommands {
     // `${guildId}-${commandName}`: [channelIds]
@@ -10,26 +10,23 @@ class ChannelCommands {
         this._instance = instance;
     }
     async action(action, guildId, commandName, channelId) {
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return;
-        }
         const _id = `${guildId}-${commandName}`;
-        const repo = await DCMD_1.ds.getRepository(channel_commands_typeorm_1.ChannelCommandsTypeorm);
-        if (action == "remove") {
+        const repo = await DCMD_1.ds.getRepository(ChannelCommandsEntity_1.ChannelCommandsEntity);
+        if (action == "remove")
             await repo.delete({
                 guildId: guildId,
                 commandId: commandName,
                 channelId: channelId,
             });
-        }
-        else {
+        else
             await repo.insert({
                 guildId: guildId,
                 commandId: commandName,
                 channelId: channelId,
             });
-        }
-        let channels = [];
+        const channels = [];
         const result = await repo.find();
         result.forEach((x) => channels.push(x.channelId));
         this._channelCommands.set(_id, channels);
@@ -42,23 +39,18 @@ class ChannelCommands {
         return await this.action("remove", guildId, commandName, channelId);
     }
     async getAvailableChannels(guildId, commandName) {
-        if (!this._instance.isConnectedToMariaDB) {
+        if (!this._instance.isConnectedToMariaDB)
             return [];
-        }
         const _id = `${guildId}-${commandName}`;
-        let t = this._channelCommands.get(_id);
-        let channels = !t ? [] : t;
-        if (!channels) {
-            const result = await DCMD_1.ds
-                .getRepository(channel_commands_typeorm_1.ChannelCommandsTypeorm)
-                .find();
+        const t = this._channelCommands.get(_id);
+        const channels = !t ? [] : t;
+        if (channels.length === 0) {
+            const result = await DCMD_1.ds.getRepository(ChannelCommandsEntity_1.ChannelCommandsEntity).find();
             result.forEach((x) => channels.push(x.channelId));
-            if (result.length < 1) {
+            if (result.length < 1)
                 this._channelCommands.set(_id, []);
-            }
-            else {
+            else
                 this._channelCommands.set(_id, channels);
-            }
         }
         return channels;
     }

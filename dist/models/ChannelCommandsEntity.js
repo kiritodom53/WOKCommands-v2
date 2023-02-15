@@ -9,26 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomCommandTypeorm = void 0;
+exports.ChannelCommandsEntity = void 0;
 const typeorm_1 = require("typeorm");
-let CustomCommandTypeorm = class CustomCommandTypeorm {
+let ChannelCommandsEntity = class ChannelCommandsEntity {
     guildId;
-    cmdId;
-    response;
+    commandId;
+    channelId;
 };
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], CustomCommandTypeorm.prototype, "guildId", void 0);
+], ChannelCommandsEntity.prototype, "guildId", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], CustomCommandTypeorm.prototype, "cmdId", void 0);
+], ChannelCommandsEntity.prototype, "commandId", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], CustomCommandTypeorm.prototype, "response", void 0);
-CustomCommandTypeorm = __decorate([
-    (0, typeorm_1.Entity)({ name: "custom_command" })
-], CustomCommandTypeorm);
-exports.CustomCommandTypeorm = CustomCommandTypeorm;
+], ChannelCommandsEntity.prototype, "channelId", void 0);
+ChannelCommandsEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: "channel_command", })
+], ChannelCommandsEntity);
+exports.ChannelCommandsEntity = ChannelCommandsEntity;

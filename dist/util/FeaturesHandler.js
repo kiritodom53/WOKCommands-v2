@@ -13,9 +13,8 @@ class FeaturesHandler {
         for (const file of files) {
             let func = require(file.filePath);
             func = func.default || func;
-            if (func instanceof Function) {
+            if (func instanceof Function)
                 await func(instance, client);
-            }
         }
     }
 }

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const CommandType_1 = __importDefault(require("../../util/CommandType"));
-const required_roles_typeorm_1 = require("../../models/required-roles-typeorm");
+const RequiredRolesEntity_1 = require("../../models/RequiredRolesEntity");
 const DCMD_1 = require("../../DCMD");
 exports.default = {
     description: "Sets what commands require what roles",
@@ -31,47 +31,40 @@ exports.default = {
         return [...command.instance.commandHandler.commands.keys()];
     },
     callback: async (commandUsage) => {
-        const { instance, guild, args } = commandUsage;
-        if (!instance.isConnectedToMariaDB) {
+        const { instance, guild, args, } = commandUsage;
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
-        const [commandName, role] = args;
+        const [commandName, role,] = args;
         const command = instance.commandHandler.commands.get(commandName);
-        if (!command) {
+        if (!command)
             return {
                 content: `The command \`${commandName}\` does not exist.`,
                 ephemeral: true,
             };
-        }
         // const _id = `${guild!.id}-${command.commandName}`;
-        const repo = await DCMD_1.ds.getRepository(required_roles_typeorm_1.RequiredRolesTypeorm);
+        const repo = await DCMD_1.ds.getRepository(RequiredRolesEntity_1.RequiredRolesEntity);
         if (!role) {
             const document = await repo.find();
             let rolesOutput = "";
-            if (document && document.length > 0) {
-                for (const d of document) {
+            if (document && document.length > 0)
+                for (const d of document)
                     rolesOutput += `<@&${d.roleId}>`;
-                }
-            }
-            else {
+            else
                 rolesOutput = "None.";
-            }
             return {
                 content: `Here are the roles for \`${commandName}\`: ${rolesOutput}`,
                 ephemeral: true,
-                allowedMentions: {
-                    roles: [],
-                },
+                allowedMentions: { roles: [], },
             };
         }
         const alreadyExistsRaw = await repo
             .createQueryBuilder("rrt")
-            .where("guildId = :guildId", { guildId: guild.id })
-            .andWhere("cmdId = :cmdId", { cmdId: commandName })
-            .andWhere("roleId IN (:values)", { values: role })
+            .where("guildId = :guildId", { guildId: guild.id, })
+            .andWhere("cmdId = :cmdId", { cmdId: commandName, })
+            .andWhere("roleId IN (:values)", { values: role, })
             .getRawOne();
         if (alreadyExistsRaw) {
             await repo.delete({
@@ -82,9 +75,7 @@ exports.default = {
             return {
                 content: `The command \`${commandName}\` no longer requires the role <@&${role}>`,
                 ephemeral: true,
-                allowedMentions: {
-                    roles: [],
-                },
+                allowedMentions: { roles: [], },
             };
         }
         await repo.insert({
@@ -95,9 +86,7 @@ exports.default = {
         return {
             content: `The command \`${commandName}\` now requires the role <@&${role}>`,
             ephemeral: true,
-            allowedMentions: {
-                roles: [],
-            },
+            allowedMentions: { roles: [], },
         };
     },
 };

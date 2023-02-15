@@ -6,22 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const getAllFiles = (path, foldersOnly = false) => {
-    const files = fs_1.default.readdirSync(path, {
-        withFileTypes: true,
-    });
+    const files = fs_1.default.readdirSync(path, { withFileTypes: true, });
     let filesFound = [];
     for (const file of files) {
         const filePath = path_1.default.join(path, file.name);
         if (file.isDirectory()) {
-            if (foldersOnly) {
+            if (foldersOnly)
                 filesFound.push({
                     filePath,
                     fileContents: file,
                 });
-            }
-            else {
-                filesFound = [...filesFound, ...getAllFiles(filePath)];
-            }
+            else
+                filesFound = [
+                    ...filesFound,
+                    ...getAllFiles(filePath),
+                ];
             continue;
         }
         const fileContents = require(filePath);

@@ -26,9 +26,7 @@ class EventHandler {
                 isAutocomplete: (interaction) => interaction.type ===
                     discord_js_1.InteractionType.ApplicationCommandAutocomplete,
             },
-            messageCreate: {
-                isHuman: (message) => !message.author.bot,
-            },
+            messageCreate: { isHuman: (message) => !message.author.bot, },
         };
         this.readFiles();
         this.registerEvents();
@@ -38,24 +36,25 @@ class EventHandler {
         const folders = this._eventsDir
             ? (0, get_all_files_1.default)(this._eventsDir, true)
             : [];
-        for (const { filePath: folderPath } of [...defaultEvents, ...folders]) {
+        for (const { filePath: folderPath, } of [
+            ...defaultEvents,
+            ...folders,
+        ]) {
             const event = folderPath.split(/[\/\\]/g).pop();
             const files = (0, get_all_files_1.default)(folderPath);
             const functions = this._eventCallbacks.get(event) || [];
-            for (const { filePath, fileContents } of files) {
+            for (const { filePath, fileContents, } of files) {
                 const isBuiltIn = !folderPath.includes(this._eventsDir);
                 const result = [fileContents];
                 const split = filePath.split(event)[1].split(/[\/\\]/g);
                 const methodName = split[split.length - 2];
                 if (isBuiltIn &&
                     this._builtInEvents[event] &&
-                    this._builtInEvents[event][methodName]) {
+                    this._builtInEvents[event][methodName])
                     result.push(this._builtInEvents[event][methodName]);
-                }
                 else if (this._events[event] &&
-                    this._events[event][methodName]) {
+                    this._events[event][methodName])
                     result.push(this._events[event][methodName]);
-                }
                 functions.push(result);
             }
             this._eventCallbacks.set(event, functions);
@@ -66,11 +65,10 @@ class EventHandler {
         for (const eventName of this._eventCallbacks.keys()) {
             const functions = this._eventCallbacks.get(eventName);
             this._client.on(eventName, async function () {
-                for (const [func, dynamicValidation] of functions) {
+                for (const [func, dynamicValidation,] of functions) {
                     if (dynamicValidation &&
-                        !(await dynamicValidation(...arguments))) {
+                        !(await dynamicValidation(...arguments)))
                         continue;
-                    }
                     func(...arguments, instance);
                 }
             });

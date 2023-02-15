@@ -12,9 +12,8 @@ class SlashCommands {
             const guild = await this._client.guilds.fetch(guildId);
             commands = guild.commands;
         }
-        else {
+        else
             commands = this._client.application?.commands;
-        }
         // @ts-ignore
         await commands?.fetch();
         return commands;
@@ -25,17 +24,15 @@ class SlashCommands {
             const existing = existingOptions[a];
             if (option.name !== existing.name ||
                 option.type !== existing.type ||
-                option.description !== existing.description) {
+                option.description !== existing.description)
                 return true;
-            }
         }
         return false;
     }
     async create(name, description, options, guildId) {
         const commands = await this.getCommands(guildId);
-        if (!commands) {
+        if (!commands)
             throw new Error(`Could not find commands for guild ${guildId}`);
-        }
         const existingCommand = commands.cache.find((cmd) => cmd.name === name);
         if (existingCommand) {
             const { description: existingDescription, options: existingOptions, } = existingCommand;
@@ -59,9 +56,8 @@ class SlashCommands {
     async delete(commandName, guildId) {
         const commands = await this.getCommands(guildId);
         const existingCommand = commands?.cache.find((cmd) => cmd.name === commandName);
-        if (!existingCommand) {
+        if (!existingCommand)
             return;
-        }
         await existingCommand.delete();
     }
     createOptions({ expectedArgs = "", minArgs = 0, }) {

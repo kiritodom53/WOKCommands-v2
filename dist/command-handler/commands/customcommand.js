@@ -56,20 +56,18 @@ exports.default = {
         const results = [
             ...command.instance.commandHandler.customCommands.getCommands(interaction.guild?.id),
         ];
-        if (results.length === 0) {
+        if (results.length === 0)
             results.push(noCommands);
-        }
         return results;
     },
     callback: async (commandUsage) => {
-        const { instance, guild } = commandUsage;
+        const { instance, guild, } = commandUsage;
         const interaction = commandUsage.interaction;
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
         const sub = interaction.options.getSubcommand();
         if (sub === "create") {
             const commandName = interaction.options.getString("command");
@@ -81,14 +79,13 @@ exports.default = {
                 ephemeral: true,
             };
         }
-        else if (sub === "delete") {
+        if (sub === "delete") {
             const commandName = interaction.options.getString("command");
-            if (commandName === noCommands) {
+            if (commandName === noCommands)
                 return {
                     content: "There are no custom commands to delete.",
                     ephemeral: true,
                 };
-            }
             await instance.commandHandler.customCommands.delete(guild.id, commandName);
             return {
                 content: `Custom command "${commandName}" has been deleted!`,

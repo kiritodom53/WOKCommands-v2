@@ -9,41 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findPrefixes = exports.setPrefix = exports.isPrefixExist = exports.GuildPrefixTypeorm = void 0;
+exports.findPrefixes = exports.setPrefix = exports.isPrefixExist = exports.GuildPrefixEntity = void 0;
 const typeorm_1 = require("typeorm");
 const DCMD_1 = require("../DCMD");
-let GuildPrefixTypeorm = class GuildPrefixTypeorm {
+let GuildPrefixEntity = class GuildPrefixEntity {
     guildId;
     prefix;
 };
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], GuildPrefixTypeorm.prototype, "guildId", void 0);
+], GuildPrefixEntity.prototype, "guildId", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], GuildPrefixTypeorm.prototype, "prefix", void 0);
-GuildPrefixTypeorm = __decorate([
-    (0, typeorm_1.Entity)({ name: "guild_prefix" })
-], GuildPrefixTypeorm);
-exports.GuildPrefixTypeorm = GuildPrefixTypeorm;
+], GuildPrefixEntity.prototype, "prefix", void 0);
+GuildPrefixEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: "guild_prefix", })
+], GuildPrefixEntity);
+exports.GuildPrefixEntity = GuildPrefixEntity;
 const isPrefixExist = async (ds, guildId, prefix) => {
-    const repo = await ds.getRepository(GuildPrefixTypeorm);
-    const result = await repo.findOneBy({
-        guildId: guildId,
-    });
+    const repo = await ds.getRepository(GuildPrefixEntity);
+    const result = await repo.findOneBy({ guildId: guildId, });
     return result;
 };
 exports.isPrefixExist = isPrefixExist;
 const setPrefix = async (guildId, prefix) => {
-    const repo = await DCMD_1.ds.getRepository(GuildPrefixTypeorm);
+    const repo = await DCMD_1.ds.getRepository(GuildPrefixEntity);
     if (await (0, exports.isPrefixExist)(DCMD_1.ds, guildId, prefix)) {
-        await repo.update({
-            guildId: guildId,
-        }, {
-            prefix: prefix,
-        });
+        await repo.update({ guildId: guildId, }, { prefix: prefix, });
         return true;
     }
     await repo.insert({
@@ -54,7 +48,7 @@ const setPrefix = async (guildId, prefix) => {
 };
 exports.setPrefix = setPrefix;
 const findPrefixes = async () => {
-    const repo = await DCMD_1.ds.getRepository(GuildPrefixTypeorm);
+    const repo = await DCMD_1.ds.getRepository(GuildPrefixEntity);
     const result = await repo.find();
     return !result ? [] : result;
 };

@@ -29,35 +29,31 @@ exports.default = {
         return [...command.instance.commandHandler.commands.keys()];
     },
     callback: async (commandUsage) => {
-        const { instance, guild } = commandUsage;
-        if (!instance.isConnectedToMariaDB) {
+        const { instance, guild, } = commandUsage;
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
         const interaction = commandUsage.interaction;
         // @ts-ignore
         const commandName = interaction.options.getString("command");
         // @ts-ignore
         const channel = interaction.options.getChannel("channel");
         const command = instance.commandHandler.commands.get(commandName.toLowerCase());
-        if (!command) {
+        if (!command)
             return {
                 content: `The command "${commandName}" does not exist.`,
                 ephemeral: true,
             };
-        }
-        const { channelCommands } = instance.commandHandler;
+        const { channelCommands, } = instance.commandHandler;
         let availableChannels = [];
         // @ts-ignore
         const canRun = (await channelCommands.getAvailableChannels(guild.id, commandName)).includes(channel.id);
-        if (canRun) {
+        if (canRun)
             availableChannels = (await channelCommands.remove(guild.id, commandName, channel.id));
-        }
-        else {
+        else
             availableChannels = (await channelCommands.add(guild.id, commandName, channel.id));
-        }
         if (availableChannels.length) {
             const channelNames = availableChannels.map((c) => `<#${c}> `);
             return {

@@ -9,9 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequiredPermissionsTypeorm = void 0;
+exports.RequiredPermissionsEntity = void 0;
 const typeorm_1 = require("typeorm");
-let RequiredPermissionsTypeorm = class RequiredPermissionsTypeorm {
+let RequiredPermissionsEntity = class RequiredPermissionsEntity {
     guildId;
     cmdId;
     permission;
@@ -19,16 +19,16 @@ let RequiredPermissionsTypeorm = class RequiredPermissionsTypeorm {
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], RequiredPermissionsTypeorm.prototype, "guildId", void 0);
+], RequiredPermissionsEntity.prototype, "guildId", void 0);
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], RequiredPermissionsTypeorm.prototype, "cmdId", void 0);
+], RequiredPermissionsEntity.prototype, "cmdId", void 0);
 __decorate([
     (0, typeorm_1.PrimaryColumn)(),
     __metadata("design:type", String)
-], RequiredPermissionsTypeorm.prototype, "permission", void 0);
-RequiredPermissionsTypeorm = __decorate([
-    (0, typeorm_1.Entity)({ name: "required_permissions" })
-], RequiredPermissionsTypeorm);
-exports.RequiredPermissionsTypeorm = RequiredPermissionsTypeorm;
+], RequiredPermissionsEntity.prototype, "permission", void 0);
+RequiredPermissionsEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: "required_permissions", })
+], RequiredPermissionsEntity);
+exports.RequiredPermissionsEntity = RequiredPermissionsEntity;

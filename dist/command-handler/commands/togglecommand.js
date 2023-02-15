@@ -24,13 +24,12 @@ exports.default = {
     },
     callback: async (commandUsage) => {
         const { instance, guild, text: commandName, interaction, } = commandUsage;
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
-        const { disabledCommands } = instance.commandHandler;
+        const { disabledCommands, } = instance.commandHandler;
         if (disabledCommands.isDisabled(guild.id, commandName)) {
             await disabledCommands.enable(guild.id, commandName);
             return {
@@ -38,12 +37,10 @@ exports.default = {
                 ephemeral: true,
             };
         }
-        else {
-            await disabledCommands.disable(guild.id, commandName);
-            return {
-                content: `Command "${commandName}" has been disabled`,
-                ephemeral: true,
-            };
-        }
+        await disabledCommands.disable(guild.id, commandName);
+        return {
+            content: `Command "${commandName}" has been disabled`,
+            ephemeral: true,
+        };
     },
 };

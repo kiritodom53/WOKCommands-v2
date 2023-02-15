@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const CommandType_1 = __importDefault(require("../../util/CommandType"));
 const DCMD_1 = require("../../DCMD");
-const config_typeorm_1 = require("../../models/config-typeorm");
+const ConfigEntity_1 = require("../../models/ConfigEntity");
+const GuildConfigEntity_1 = require("../../models/GuildConfigEntity");
 exports.default = {
     description: "Toggles a command on or off for your guild",
     type: CommandType_1.default.SLASH,
@@ -33,21 +34,27 @@ exports.default = {
     },
     callback: async (commandUsage) => {
         const { instance, guild, text: commandName, interaction, } = commandUsage;
-        if (!instance.isConnectedToMariaDB) {
+        if (!instance.isConnectedToMariaDB)
             return {
                 content: "This bot is not connected to a database which is required for this command. Please contact the bot owner.",
                 ephemeral: true,
             };
-        }
-        if (!interaction.isChatInputCommand()) {
+        if (!interaction.isChatInputCommand())
             return;
-        }
         const key = interaction.options.getString("command");
         const value = interaction.options.getString("command");
-        await DCMD_1.ds.getRepository(config_typeorm_1.ConfigTypeorm).save({
-            key,
-            value,
-        });
+        const conf = await DCMD_1.ds.getRepository(ConfigEntity_1.ConfigEntity).findBy({ key: key, });
+        if (!conf)
+            return {
+                content: "This config doesn't exist. Please contact the bot owner.",
+                ephemeral: true,
+            };
+        const result = await GuildConfigEntity_1.GuildConfigEntity.saveOrUpdate(guild.id, key, value);
+        if (!result)
+            return {
+                content: "Neexistující konfigurace!",
+                ephemeral: true,
+            };
         return {
             content: `Konfigurace \`${key}\` byla nastavena na \`${value}\``,
             ephemeral: true,

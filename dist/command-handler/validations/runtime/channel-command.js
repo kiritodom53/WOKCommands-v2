@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = async (command, usage) => {
-    const { commandName, instance } = command;
-    const { guild, channel, message, interaction } = usage;
-    if (!guild || !instance.isConnectedToMariaDB) {
+    const { commandName, instance, } = command;
+    const { guild, channel, message, interaction, } = usage;
+    if (!guild || !instance.isConnectedToMariaDB)
         return true;
-    }
     const availableChannels = await instance.commandHandler.channelCommands.getAvailableChannels(guild.id, commandName);
     if (availableChannels.length && !availableChannels.includes(channel.id)) {
         const channelNames = availableChannels.map((c) => `<#${c}> `);
