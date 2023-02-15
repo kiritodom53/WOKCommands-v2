@@ -173,8 +173,6 @@ export class Command {
 }
 
 export {
-    CommandObject,
-    Command,
     CommandType,
     ConfigType,
     CooldownTypes,
