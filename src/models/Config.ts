@@ -3,10 +3,10 @@ import {
 } from "typeorm";
 import { ds } from "../DCMD";
 import ConfigType from "../util/ConfigType";
-import { GuildConfigEntity } from "./GuildConfigEntity";
+import { GuildConfig } from "./GuildConfig";
 
 @Entity({ name: "config", })
-export class ConfigEntity {
+export class Config {
     @PrimaryColumn({ unique: true, })
     key: string;
 
@@ -20,10 +20,10 @@ export class ConfigEntity {
     })
     isRequireForRun: boolean;
 
-    @OneToMany(type => GuildConfigEntity, guildConfig => guildConfig.config)
-    guildConfigs!: GuildConfigEntity[];
+    @OneToMany(type => GuildConfig, guildConfig => guildConfig.config)
+    guildConfigs!: GuildConfig[];
 
-    public static async findByKey(key: ConfigType): Promise<ConfigEntity | null> {
-        return await ds.getRepository(ConfigEntity).findOneBy({ key, });
+    public static async findByKey(key: ConfigType): Promise<Config | null> {
+        return await ds.getRepository(Config).findOneBy({ key, });
     }
 }

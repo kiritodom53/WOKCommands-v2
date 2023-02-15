@@ -4,8 +4,8 @@ import Command from "../Command";
 import CommandType from "../../util/CommandType";
 import { CommandObject, CommandUsage } from "../../../typings";
 import { ds } from "../../DCMD";
-import { ConfigEntity } from "../../models/ConfigEntity";
-import { GuildConfigEntity } from "../../models/GuildConfigEntity";
+import { Config } from "../../models/Config";
+import { GuildConfig } from "../../models/GuildConfig";
 
 export default {
     description: "Toggles a command on or off for your guild",
@@ -59,14 +59,14 @@ export default {
         const key = interaction.options.getString("command") as string;
         const value = interaction.options.getString("command") as string;
 
-        const conf = await ds.getRepository(ConfigEntity).findBy({ key: key, });
+        const conf = await ds.getRepository(Config).findBy({ key: key, });
         if (!conf)
             return {
                 content: "This config doesn't exist. Please contact the bot owner.",
                 ephemeral: true,
             };
 
-        const result = await GuildConfigEntity.saveOrUpdate(guild!.id, key, value);
+        const result = await GuildConfig.saveOrUpdate(guild!.id, key, value);
 
         if (!result)
             return {

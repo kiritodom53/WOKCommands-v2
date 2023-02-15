@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const DCMD_1 = require("../../../DCMD");
-const GuildConfigEntity_1 = require("../../../models/GuildConfigEntity");
+const GuildConfig_1 = require("../../../models/GuildConfig");
 exports.default = async (command, usage) => {
     const { configs, } = command.commandObject;
     const { commandName, instance, } = command;
@@ -9,7 +9,7 @@ exports.default = async (command, usage) => {
     if (!guild || !instance.isConnectedToMariaDB)
         return true;
     const results = await DCMD_1.ds
-        .getRepository(GuildConfigEntity_1.GuildConfigEntity)
+        .getRepository(GuildConfig_1.GuildConfig)
         .createQueryBuilder("c")
         .where("value is null")
         .andWhere("`configKey` IN (:keys)", { keys: configs, })

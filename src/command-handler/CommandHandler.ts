@@ -21,12 +21,12 @@ import DCMD, { CommandObject,
     CommandUsage,
     InternalCooldownConfig } from "../../typings";
 import DefaultCommands from "../util/DefaultCommands";
-import { ConfigEntity } from "../models/ConfigEntity";
+import { Config } from "../models/Config";
 import { ds } from "../DCMD";
 import { CommandLogEntity } from "../models/CommandLogEntity";
 import { currentDateCZE } from "../util/base-utils";
 import ConfigType from "../util/ConfigType";
-import { GuildConfigEntity } from "../models/GuildConfigEntity";
+import { GuildConfig } from "../models/GuildConfig";
 
 class CommandHandler {
     // <commandName, instance of the Command class>
@@ -94,7 +94,7 @@ class CommandHandler {
 
     private async loadConfigs() {
         console.log("load config");
-        const configs = await ds.getRepository(ConfigEntity).find();
+        const configs = await ds.getRepository(Config).find();
 
         if (!configs)
             return (this._configs = []);
@@ -250,7 +250,7 @@ class CommandHandler {
             cmdType: cmdType,
         });
 
-        const logChannelConfig = await GuildConfigEntity.findByKey(
+        const logChannelConfig = await GuildConfig.findByKey(
             guildId,
             ConfigType.LOG_TRIGGERED_CMD_CHANNEL_ID,
         );

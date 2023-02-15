@@ -1,26 +1,26 @@
 import {
     Column, Entity, ManyToOne, PrimaryColumn
 } from "typeorm";
-import { ConfigEntity } from "./ConfigEntity";
+import { Config } from "./Config";
 import ConfigType from "../util/ConfigType";
 import { ds } from "../DCMD";
 
 @Entity({ name: "guild_config", })
-export class GuildConfigEntity {
+export class GuildConfig {
     @PrimaryColumn({ unique: true, })
     guildId: string;
 
     @PrimaryColumn({ unique: true, })
     configKey: string;
 
-    @ManyToOne(type => ConfigEntity, config => config.guildConfigs)
-    config: ConfigEntity;
+    @ManyToOne(type => Config, config => config.guildConfigs)
+    config: Config;
 
     @Column("varchar", { nullable: true, })
     value!: string | null;
 
-    public static async findByKey(guildId: string, key: ConfigType | string): Promise<GuildConfigEntity | null> {
-        return await ds.getRepository(GuildConfigEntity).findOneBy({
+    public static async findByKey(guildId: string, key: ConfigType | string): Promise<GuildConfig | null> {
+        return await ds.getRepository(GuildConfig).findOneBy({
             guildId,
             configKey: key,
         });
@@ -28,17 +28,17 @@ export class GuildConfigEntity {
 
     public static async saveOrUpdate(guildId: string, key: string, value: string | null = null): Promise<boolean> {
         try {
-            const guildConf = GuildConfigEntity.findByKey(guildId, key);
+            const guildConf = GuildConfig.findByKey(guildId, key);
 
             if (!guildConf) {
-                await ds.getRepository(GuildConfigEntity).save({
+                await ds.getRepository(GuildConfig).save({
                     guildId,
                     configKey: key,
                     value,
                 });
                 return true;
             }
-            await ds.getRepository(GuildConfigEntity).update({
+            await ds.getRepository(GuildConfig).update({
                 guildId,
                 configKey: key,
             }, { value, });

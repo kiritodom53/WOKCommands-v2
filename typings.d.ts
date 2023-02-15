@@ -22,7 +22,7 @@ import { CustomCommandEntity } from "./src/models/CustomCommandEntity";
 import { RequiredRolesEntity } from "./src/models/RequiredRolesEntity";
 import { GuildPrefixEntity } from "./src/models/GuildPrefixEntity";
 import { CooldownEntity } from "./src/models/CooldownEntity";
-import { ConfigEntity } from "./src/models/ConfigEntity";
+import { Config } from "./src/models/Config";
 import { IDbUser } from "./src/models/interfaces/IDbUser";
 
 export default class DCMD {
@@ -186,6 +186,6 @@ export {
     RequiredRolesEntity,
     GuildPrefixEntity,
     CooldownEntity,
-    ConfigEntity,
+    Config,
     IDbUser,
 };

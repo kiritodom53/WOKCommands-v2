@@ -8,41 +8,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var ConfigEntity_1;
+var Config_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigEntity = void 0;
+exports.Config = void 0;
 const typeorm_1 = require("typeorm");
 const DCMD_1 = require("../DCMD");
-const GuildConfigEntity_1 = require("./GuildConfigEntity");
-let ConfigEntity = ConfigEntity_1 = class ConfigEntity {
+const GuildConfig_1 = require("./GuildConfig");
+let Config = Config_1 = class Config {
     key;
     description;
     isRequireForRun;
     guildConfigs;
     static async findByKey(key) {
-        return await DCMD_1.ds.getRepository(ConfigEntity_1).findOneBy({ key, });
+        return await DCMD_1.ds.getRepository(Config_1).findOneBy({ key, });
     }
 };
 __decorate([
     (0, typeorm_1.PrimaryColumn)({ unique: true, }),
     __metadata("design:type", String)
-], ConfigEntity.prototype, "key", void 0);
+], Config.prototype, "key", void 0);
 __decorate([
     (0, typeorm_1.Column)("varchar", { nullable: true, }),
     __metadata("design:type", Object)
-], ConfigEntity.prototype, "description", void 0);
+], Config.prototype, "description", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         nullable: false,
         default: false,
     }),
     __metadata("design:type", Boolean)
-], ConfigEntity.prototype, "isRequireForRun", void 0);
+], Config.prototype, "isRequireForRun", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(type => GuildConfigEntity_1.GuildConfigEntity, guildConfig => guildConfig.config),
+    (0, typeorm_1.OneToMany)(type => GuildConfig_1.GuildConfig, guildConfig => guildConfig.config),
     __metadata("design:type", Array)
-], ConfigEntity.prototype, "guildConfigs", void 0);
-ConfigEntity = ConfigEntity_1 = __decorate([
+], Config.prototype, "guildConfigs", void 0);
+Config = Config_1 = __decorate([
     (0, typeorm_1.Entity)({ name: "config", })
-], ConfigEntity);
-exports.ConfigEntity = ConfigEntity;
+], Config);
+exports.Config = Config;

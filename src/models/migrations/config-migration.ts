@@ -1,9 +1,9 @@
 import { ds } from "../../DCMD";
-import { ConfigEntity } from "../ConfigEntity";
+import { Config } from "../Config";
 import ConfigType from "../../util/ConfigType";
 
 export const migrateConfig = async () => {
-    const repo = ds.getRepository(ConfigEntity);
+    const repo = ds.getRepository(Config);
 
     for (const config of Object.values(ConfigType))
         await repo.query(

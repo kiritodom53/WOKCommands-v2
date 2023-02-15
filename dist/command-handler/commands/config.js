@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const CommandType_1 = __importDefault(require("../../util/CommandType"));
 const DCMD_1 = require("../../DCMD");
-const ConfigEntity_1 = require("../../models/ConfigEntity");
-const GuildConfigEntity_1 = require("../../models/GuildConfigEntity");
+const Config_1 = require("../../models/Config");
+const GuildConfig_1 = require("../../models/GuildConfig");
 exports.default = {
     description: "Toggles a command on or off for your guild",
     type: CommandType_1.default.SLASH,
@@ -43,13 +43,13 @@ exports.default = {
             return;
         const key = interaction.options.getString("command");
         const value = interaction.options.getString("command");
-        const conf = await DCMD_1.ds.getRepository(ConfigEntity_1.ConfigEntity).findBy({ key: key, });
+        const conf = await DCMD_1.ds.getRepository(Config_1.Config).findBy({ key: key, });
         if (!conf)
             return {
                 content: "This config doesn't exist. Please contact the bot owner.",
                 ephemeral: true,
             };
-        const result = await GuildConfigEntity_1.GuildConfigEntity.saveOrUpdate(guild.id, key, value);
+        const result = await GuildConfig_1.GuildConfig.saveOrUpdate(guild.id, key, value);
         if (!result)
             return {
                 content: "Neexistující konfigurace!",

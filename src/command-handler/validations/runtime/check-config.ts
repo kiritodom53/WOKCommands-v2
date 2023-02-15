@@ -1,8 +1,8 @@
 import Command from "../../Command";
-import { ConfigEntity } from "../../../models/ConfigEntity";
+import { Config } from "../../../models/Config";
 import { CommandUsage } from "../../../../typings";
 import { ds } from "../../../DCMD";
-import { GuildConfigEntity } from "../../../models/GuildConfigEntity";
+import { GuildConfig } from "../../../models/GuildConfig";
 
 export default async (command: Command, usage: CommandUsage) => {
     const { configs, } = command.commandObject;
@@ -14,7 +14,7 @@ export default async (command: Command, usage: CommandUsage) => {
 
 
     const results = await ds
-        .getRepository(GuildConfigEntity)
+        .getRepository(GuildConfig)
         .createQueryBuilder("c")
         .where("value is null")
         .andWhere("`configKey` IN (:keys)", { keys: configs, })

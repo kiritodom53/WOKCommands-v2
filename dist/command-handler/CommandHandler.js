@@ -14,12 +14,12 @@ const DisabledCommands_1 = __importDefault(require("./DisabledCommands"));
 const PrefixHandler_1 = __importDefault(require("./PrefixHandler"));
 const CommandType_1 = __importDefault(require("../util/CommandType"));
 const DefaultCommands_1 = __importDefault(require("../util/DefaultCommands"));
-const ConfigEntity_1 = require("../models/ConfigEntity");
+const Config_1 = require("../models/Config");
 const DCMD_1 = require("../DCMD");
 const CommandLogEntity_1 = require("../models/CommandLogEntity");
 const base_utils_1 = require("../util/base-utils");
 const ConfigType_1 = __importDefault(require("../util/ConfigType"));
-const GuildConfigEntity_1 = require("../models/GuildConfigEntity");
+const GuildConfig_1 = require("../models/GuildConfig");
 class CommandHandler {
     // <commandName, instance of the Command class>
     _configs = [];
@@ -72,7 +72,7 @@ class CommandHandler {
     }
     async loadConfigs() {
         console.log("load config");
-        const configs = await DCMD_1.ds.getRepository(ConfigEntity_1.ConfigEntity).find();
+        const configs = await DCMD_1.ds.getRepository(Config_1.Config).find();
         if (!configs)
             return (this._configs = []);
         for (const config of configs)
@@ -162,7 +162,7 @@ class CommandHandler {
             triggeredAtUTS: (0, base_utils_1.currentDateCZE)("unix_timestamp").toString(),
             cmdType: cmdType,
         });
-        const logChannelConfig = await GuildConfigEntity_1.GuildConfigEntity.findByKey(guildId, ConfigType_1.default.LOG_TRIGGERED_CMD_CHANNEL_ID);
+        const logChannelConfig = await GuildConfig_1.GuildConfig.findByKey(guildId, ConfigType_1.default.LOG_TRIGGERED_CMD_CHANNEL_ID);
         if (logChannelConfig)
             return;
         if (!logChannelConfig.value)
