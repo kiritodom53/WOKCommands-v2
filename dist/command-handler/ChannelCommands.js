@@ -14,6 +14,7 @@ class ChannelCommands {
             return;
         const _id = `${guildId}-${commandName}`;
         const repo = await DCMD_1.ds.getRepository(ChannelCommandsEntity_1.ChannelCommandsEntity);
+        let res;
         if (action == "remove")
             await repo.delete({
                 guildId: guildId,
@@ -21,14 +22,18 @@ class ChannelCommands {
                 channelId: channelId,
             });
         else
-            await repo.insert({
+            res = await repo.insert({
                 guildId: guildId,
                 commandId: commandName,
                 channelId: channelId,
             });
         const channels = [];
-        const result = await repo.find();
+        const result = await repo.findBy({
+            guildId: guildId,
+            commandId: commandName,
+        });
         result.forEach((x) => channels.push(x.channelId));
+        // Id a všechny kanály co mají toto id
         this._channelCommands.set(_id, channels);
         return channels;
     }
@@ -41,9 +46,13 @@ class ChannelCommands {
     async getAvailableChannels(guildId, commandName) {
         if (!this._instance.isConnectedToMariaDB)
             return [];
+        console.log("getAvailableChannels");
         const _id = `${guildId}-${commandName}`;
+        console.log(_id);
         const t = this._channelCommands.get(_id);
+        console.log(t);
         const channels = !t ? [] : t;
+        console.log(channels);
         if (channels.length === 0) {
             const result = await DCMD_1.ds.getRepository(ChannelCommandsEntity_1.ChannelCommandsEntity).findBy({
                 commandId: commandName,
