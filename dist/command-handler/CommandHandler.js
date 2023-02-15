@@ -163,7 +163,7 @@ class CommandHandler {
             cmdType: cmdType,
         });
         const logChannelConfig = await GuildConfig_1.GuildConfig.findByKey(guildId, ConfigType_1.default.LOG_TRIGGERED_CMD_CHANNEL_ID);
-        if (logChannelConfig)
+        if (!logChannelConfig)
             return;
         if (!logChannelConfig.value)
             return;
