@@ -29,6 +29,6 @@ __decorate([
     __metadata("design:type", String)
 ], RequiredRolesEntity.prototype, "roleId", void 0);
 RequiredRolesEntity = __decorate([
-    (0, typeorm_1.Entity)({ name: "required_roles", })
+    (0, typeorm_1.Entity)({ name: "required_role", })
 ], RequiredRolesEntity);
 exports.RequiredRolesEntity = RequiredRolesEntity;

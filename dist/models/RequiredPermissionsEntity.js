@@ -29,6 +29,6 @@ __decorate([
     __metadata("design:type", String)
 ], RequiredPermissionsEntity.prototype, "permission", void 0);
 RequiredPermissionsEntity = __decorate([
-    (0, typeorm_1.Entity)({ name: "required_permissions", })
+    (0, typeorm_1.Entity)({ name: "required_permission", })
 ], RequiredPermissionsEntity);
 exports.RequiredPermissionsEntity = RequiredPermissionsEntity;
