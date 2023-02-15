@@ -27,7 +27,7 @@ let GuildConfig = GuildConfig_1 = class GuildConfig {
     }
     static async saveOrUpdate(guildId, key, value = null) {
         try {
-            const guildConf = GuildConfig_1.findByKey(guildId, key);
+            const guildConf = await GuildConfig_1.findByKey(guildId, key);
             if (!guildConf) {
                 console.log("save cf");
                 await DCMD_1.ds.getRepository(GuildConfig_1).save({

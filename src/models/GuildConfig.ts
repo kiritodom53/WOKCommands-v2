@@ -28,7 +28,7 @@ export class GuildConfig {
 
     public static async saveOrUpdate(guildId: string, key: string, value: string | null = null): Promise<boolean> {
         try {
-            const guildConf = GuildConfig.findByKey(guildId, key);
+            const guildConf = await GuildConfig.findByKey(guildId, key);
 
             if (!guildConf) {
                 console.log("save cf");
