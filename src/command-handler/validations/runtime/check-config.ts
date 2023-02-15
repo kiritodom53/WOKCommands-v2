@@ -2,6 +2,7 @@ import Command from "../../Command";
 import { ConfigEntity } from "../../../models/ConfigEntity";
 import { CommandUsage } from "../../../../typings";
 import { ds } from "../../../DCMD";
+import { GuildConfigEntity } from "../../../models/GuildConfigEntity";
 
 export default async (command: Command, usage: CommandUsage) => {
     const { configs, } = command.commandObject;
@@ -13,10 +14,10 @@ export default async (command: Command, usage: CommandUsage) => {
 
 
     const results = await ds
-        .getRepository(ConfigEntity)
+        .getRepository(GuildConfigEntity)
         .createQueryBuilder("c")
         .where("value is null")
-        .andWhere("`key` IN (:keys)", { keys: configs, })
+        .andWhere("`configKey` IN (:keys)", { keys: configs, })
         .getRawMany();
 
     if (!results)
@@ -27,10 +28,7 @@ export default async (command: Command, usage: CommandUsage) => {
         return true;
 
 
-    const unsetConfigs: Map<string, string | null> = new Map<
-        string,
-        string | null
-    >();
+    const unsetConfigs: Map<string, string | null> = new Map<string, string | null>();
     results.forEach((x) => unsetConfigs.set(x.c_key, !x.c_description ? null : x.c_description),
     );
 

@@ -1,6 +1,6 @@
 import { Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "channel_commands", })
+@Entity({ name: "channel_command", })
 export class ChannelCommandsEntity {
     @PrimaryColumn()
     guildId: string;

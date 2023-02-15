@@ -135,7 +135,7 @@ class DssbCmdler {
                 process.env.LIVE == "true"
                     ? process.env.MARIADB_DATABASE
                     : process.env.MARIADB_DATABASE_TEST,
-            synchronize: process.env.LIVE != "true", // true only in develop mode, turn off in production
+            synchronize: false, // Není potřeba synchronizovat, pouze se dotážeme na konkrétní tabulky
             entities: indexModel,
         });
 

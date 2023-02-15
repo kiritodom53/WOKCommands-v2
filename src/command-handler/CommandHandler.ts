@@ -26,6 +26,7 @@ import { ds } from "../DCMD";
 import { CommandLogEntity } from "../models/CommandLogEntity";
 import { currentDateCZE } from "../util/base-utils";
 import ConfigType from "../util/ConfigType";
+import { GuildConfigEntity } from "../models/GuildConfigEntity";
 
 class CommandHandler {
     // <commandName, instance of the Command class>
@@ -97,7 +98,6 @@ class CommandHandler {
 
         if (!configs)
             return (this._configs = []);
-
 
         for (const config of configs)
             this._configs.push(config.key);
@@ -241,17 +241,17 @@ class CommandHandler {
         if (excludeLog)
             return;
 
-
         await ds.getRepository(CommandLogEntity).save({
             guildId: guildId!,
             userId: user.id,
             commandId: command.commandName,
-            triggeredAtCTS: currentDateCZE("datetime"),
+            triggeredAtCTS: currentDateCZE("datetime"), // Todo: předělat datum
             triggeredAtUTS: currentDateCZE("unix_timestamp").toString(),
             cmdType: cmdType,
         });
 
-        const logChannelConfig = await ConfigEntity.findByKey(
+        const logChannelConfig = await GuildConfigEntity.findByKey(
+            guildId,
             ConfigType.LOG_TRIGGERED_CMD_CHANNEL_ID,
         );
 

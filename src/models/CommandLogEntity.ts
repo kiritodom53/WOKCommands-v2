@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "command_logs", })
+@Entity({ name: "command_log", })
 export class CommandLogEntity {
     @PrimaryColumn({ unique: true, })
     guildId: string;
