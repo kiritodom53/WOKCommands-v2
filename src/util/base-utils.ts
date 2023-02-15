@@ -13,4 +13,7 @@ export const currentDateCZE = (type: "datetime" | "unix_timestamp" | "locate_cz"
     return Math.floor(d / 1000);
 };
 
-export default currentDateCZE;
+export function stripNonNumeric(input: string): string {
+    const regex = /[^0-9]/g;
+    return input.replace(regex, "");
+}

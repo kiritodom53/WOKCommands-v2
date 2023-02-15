@@ -6,6 +6,7 @@ import { CommandObject, CommandUsage } from "../../../typings";
 import { ds } from "../../DCMD";
 import { Config } from "../../models/Config";
 import { GuildConfig } from "../../models/GuildConfig";
+import { stripNonNumeric } from "../../util/base-utils";
 
 export default {
     description: "Toggles a command on or off for your guild",
@@ -66,7 +67,7 @@ export default {
                 ephemeral: true,
             };
 
-        const result = await GuildConfig.saveOrUpdate(guild!.id, key, value);
+        const result = await GuildConfig.saveOrUpdate(guild!.id, key, stripNonNumeric(value));
 
         if (!result)
             return {

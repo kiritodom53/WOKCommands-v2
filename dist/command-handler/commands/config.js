@@ -8,6 +8,7 @@ const CommandType_1 = __importDefault(require("../../util/CommandType"));
 const DCMD_1 = require("../../DCMD");
 const Config_1 = require("../../models/Config");
 const GuildConfig_1 = require("../../models/GuildConfig");
+const base_utils_1 = require("../../util/base-utils");
 exports.default = {
     description: "Toggles a command on or off for your guild",
     type: CommandType_1.default.SLASH,
@@ -49,7 +50,7 @@ exports.default = {
                 content: "This config doesn't exist. Please contact the bot owner.",
                 ephemeral: true,
             };
-        const result = await GuildConfig_1.GuildConfig.saveOrUpdate(guild.id, key, value);
+        const result = await GuildConfig_1.GuildConfig.saveOrUpdate(guild.id, key, (0, base_utils_1.stripNonNumeric)(value));
         if (!result)
             return {
                 content: "Neexistující konfigurace!",
