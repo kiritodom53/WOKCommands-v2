@@ -61,7 +61,7 @@ class CommandHandler {
 
         this.readFiles();
 
-        this.loadConfigs();
+        // this.loadConfigs();
     }
 
     public get commands() {
