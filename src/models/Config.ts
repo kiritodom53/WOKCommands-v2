@@ -20,6 +20,13 @@ export class Config {
     })
     isRequireForRun: boolean;
 
+    @Column({
+        nullable: false,
+        default: "textChannelId",
+        comment: "textChannelId, roleId, userId, voiceChannelId, textGroupId",
+    })
+    type: string;
+
     @OneToMany(type => GuildConfig, guildConfig => guildConfig.config)
     guildConfigs!: GuildConfig[];
 

@@ -18,6 +18,7 @@ let Config = Config_1 = class Config {
     key;
     description;
     isRequireForRun;
+    type;
     guildConfigs;
     static async findByKey(key) {
         return await DCMD_1.ds.getRepository(Config_1).findOneBy({ key, });
@@ -38,6 +39,14 @@ __decorate([
     }),
     __metadata("design:type", Boolean)
 ], Config.prototype, "isRequireForRun", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        nullable: false,
+        default: "textChannelId",
+        comment: "textChannelId, roleId, userId, voiceChannelId, textGroupId",
+    }),
+    __metadata("design:type", String)
+], Config.prototype, "type", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(type => GuildConfig_1.GuildConfig, guildConfig => guildConfig.config),
     __metadata("design:type", Array)
