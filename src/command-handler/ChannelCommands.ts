@@ -64,13 +64,9 @@ class ChannelCommands {
         if (!this._instance.isConnectedToMariaDB)
             return [];
 
-        console.log("getAvailableChannels");
         const _id = `${ guildId }-${ commandName }`;
-        console.log(_id);
         const t = this._channelCommands.get(_id);
-        console.log(t);
         const channels: Array<string> = !t ? [] : t;
-        console.log(channels);
 
         if (channels.length === 0) {
             const result = await ds.getRepository(ChannelCommandsEntity).findBy({
