@@ -29,17 +29,19 @@ let GuildConfig = GuildConfig_1 = class GuildConfig {
         try {
             const guildConf = GuildConfig_1.findByKey(guildId, key);
             if (!guildConf) {
+                console.log("save cf");
                 await DCMD_1.ds.getRepository(GuildConfig_1).save({
-                    guildId,
+                    guildId: guildId,
                     configKey: key,
-                    value,
+                    value: value,
                 });
                 return true;
             }
+            console.log("update cf");
             await DCMD_1.ds.getRepository(GuildConfig_1).update({
-                guildId,
+                guildId: guildId,
                 configKey: key,
-            }, { value, });
+            }, { value: value, });
             return true;
         }
         catch (e) {

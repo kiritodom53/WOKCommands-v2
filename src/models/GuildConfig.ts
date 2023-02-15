@@ -31,17 +31,19 @@ export class GuildConfig {
             const guildConf = GuildConfig.findByKey(guildId, key);
 
             if (!guildConf) {
+                console.log("save cf");
                 await ds.getRepository(GuildConfig).save({
-                    guildId,
+                    guildId: guildId,
                     configKey: key,
-                    value,
+                    value: value,
                 });
                 return true;
             }
+            console.log("update cf");
             await ds.getRepository(GuildConfig).update({
-                guildId,
+                guildId: guildId,
                 configKey: key,
-            }, { value, });
+            }, { value: value, });
             return true;
         } catch (e) {
             return false;
