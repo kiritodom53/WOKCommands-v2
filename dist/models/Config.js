@@ -20,10 +20,7 @@ let Config = Config_1 = class Config {
     isRequireForRun;
     guildConfigs;
     static async findByKey(key) {
-        console.log("Config::findByKey - start");
-        const t = await DCMD_1.ds.getRepository(Config_1).findOneBy({ key, });
-        console.log("Config::findByKey - end");
-        return t;
+        return await DCMD_1.ds.getRepository(Config_1).findOneBy({ key, });
     }
 };
 __decorate([

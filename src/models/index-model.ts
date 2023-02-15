@@ -7,6 +7,7 @@ import { RequiredPermissionsEntity } from "./RequiredPermissionsEntity";
 import { RequiredRolesEntity } from "./RequiredRolesEntity";
 import { Config } from "./Config";
 import { CommandLogEntity } from "./CommandLogEntity";
+import { GuildConfig } from "./GuildConfig";
 
 export const DbModels = [
     RequiredPermissionsEntity,
@@ -17,6 +18,7 @@ export const DbModels = [
     GuildPrefixEntity,
     CommandLogEntity,
     CooldownEntity,
+    GuildConfig,
     Config,
 ];
 

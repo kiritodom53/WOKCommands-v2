@@ -24,9 +24,6 @@ export class Config {
     guildConfigs!: GuildConfig[];
 
     public static async findByKey(key: ConfigType): Promise<Config | null> {
-        console.log("Config::findByKey - start");
-        const t = await ds.getRepository(Config).findOneBy({ key, });
-        console.log("Config::findByKey - end");
-        return t;
+        return await ds.getRepository(Config).findOneBy({ key, });
     }
 }

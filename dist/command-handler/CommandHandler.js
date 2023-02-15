@@ -47,7 +47,7 @@ class CommandHandler {
             ...this.getValidations(instance.validations?.runtime),
         ];
         this.readFiles();
-        // this.loadConfigs();
+        this.loadConfigs();
     }
     get commands() {
         return this._commands;

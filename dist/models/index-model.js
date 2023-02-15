@@ -10,6 +10,7 @@ const RequiredPermissionsEntity_1 = require("./RequiredPermissionsEntity");
 const RequiredRolesEntity_1 = require("./RequiredRolesEntity");
 const Config_1 = require("./Config");
 const CommandLogEntity_1 = require("./CommandLogEntity");
+const GuildConfig_1 = require("./GuildConfig");
 exports.DbModels = [
     RequiredPermissionsEntity_1.RequiredPermissionsEntity,
     DisabledCommandsEntity_1.DisabledCommandsEntity,
@@ -19,6 +20,7 @@ exports.DbModels = [
     GuildPrefixEntity_1.GuildPrefixEntity,
     CommandLogEntity_1.CommandLogEntity,
     CooldownEntity_1.CooldownEntity,
+    GuildConfig_1.GuildConfig,
     Config_1.Config,
 ];
 exports.default = exports.DbModels;
